@@ -7,7 +7,7 @@ export declare type RequestUncheckedResponse = PipelineResponse & {
     body: any;
 };
 interface SubmitBatchRequest202Headers {
-    "Operation-Location"?: string;
+    "operation-location"?: string;
 }
 export declare type SubmitBatchRequest202Response = SubmitBatchRequest202Properties & PipelineResponse;
 interface SubmitBatchRequest202Properties {

@@ -51,9 +51,13 @@ function sendRequest(baseUrl, pipeline, route, argumentsDetails) {
             headers,
         });
         const result = yield pipeline.sendRequest(httpClient, request);
+        let rawHeaders = {};
+        for (const [key, value] of result.headers) {
+            rawHeaders[key] = value;
+        }
         return {
             request,
-            headers: result.headers,
+            headers: rawHeaders,
             status: result.status,
             body: JSON.parse(result.bodyAsText || "{}"),
         };

@@ -106,10 +106,24 @@ export interface FileFormat {
 }
 
 export interface StorageSourceListResult {
-  value: "" | "one";
+  value: StorageSource;
 }
 
-export type StorageSource = string;
-export type StorageInputType = string;
-export type ErrorCodeV2 = string;
-export type Status = string;
+export type StorageSource = "AzureBlob";
+export type StorageInputType = "Folder" | "File";
+export type ErrorCodeV2 =
+  | "InvalidRequest"
+  | "InvalidArgument"
+  | "InternalServerError"
+  | "ServiceUnavailable"
+  | "ResourceNotFound"
+  | "Unauthorized"
+  | "RequestRateTooHigh";
+export type Status =
+  | "NotStarted"
+  | "Running"
+  | "Succeeded"
+  | "Failed"
+  | "Cancelled"
+  | "Cancelling"
+  | "ValidationFailed";

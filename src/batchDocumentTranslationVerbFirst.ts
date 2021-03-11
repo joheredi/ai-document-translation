@@ -4,6 +4,7 @@ import {
   createHttpHeaders,
   HttpMethods,
   Pipeline,
+  RawHttpHeaders,
 } from "@azure/core-https";
 import { KeyCredential, TokenCredential } from "@azure/core-auth";
 
@@ -338,10 +339,13 @@ async function sendRequest<R extends keyof Routes>(
   });
 
   const result = await pipeline.sendRequest(httpClient, request);
-
+  let rawHeaders: RawHttpHeaders = {};
+  for (const [key, value] of result.headers) {
+    rawHeaders[key] = value;
+  }
   return {
     request,
-    headers: result.headers,
+    headers: rawHeaders as any,
     status: result.status as any,
     body: JSON.parse(result.bodyAsText || "{}"),
   };

@@ -90,10 +90,10 @@ export interface FileFormat {
     versions?: string[];
 }
 export interface StorageSourceListResult {
-    value: "" | "one";
+    value: StorageSource;
 }
-export declare type StorageSource = string;
-export declare type StorageInputType = string;
-export declare type ErrorCodeV2 = string;
-export declare type Status = string;
+export declare type StorageSource = "AzureBlob";
+export declare type StorageInputType = "Folder" | "File";
+export declare type ErrorCodeV2 = "InvalidRequest" | "InvalidArgument" | "InternalServerError" | "ServiceUnavailable" | "ResourceNotFound" | "Unauthorized" | "RequestRateTooHigh";
+export declare type Status = "NotStarted" | "Running" | "Succeeded" | "Failed" | "Cancelled" | "Cancelling" | "ValidationFailed";
 //# sourceMappingURL=models.d.ts.map

@@ -7,6 +7,7 @@ import {
   Pipeline,
   PipelineOptions,
   PipelineResponse,
+  RawHttpHeaders,
 } from "@azure/core-https";
 import {
   createDefaultPipeline,
@@ -77,7 +78,7 @@ import {
 interface Routes {
   "/batches": {
     post(
-      options?: SubmitBatchRequestParameters
+      options: SubmitBatchRequestParameters
     ): Promise<
       | SubmitBatchRequest202Response
       | SubmitBatchRequest400Response
@@ -317,9 +318,14 @@ async function sendRequest(
   });
 
   const result = await pipeline.sendRequest(httpClient, request);
+  let rawHeaders: RawHttpHeaders = {};
+  for (const [key, value] of result.headers) {
+    rawHeaders[key] = value;
+  }
+
   return {
     request,
-    headers: result.headers,
+    headers: rawHeaders,
     status: result.status as any,
     body: JSON.parse(result.bodyAsText || "{}"),
   };
