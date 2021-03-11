@@ -21,7 +21,7 @@ const createBatchDocumentTranslationPathFirst = (credentials, endpoint, options)
         return {
             subClient: (subPath, ...subPathArgs) => {
                 const subClientPath = `${path}${subPath}`;
-                return client(subClientPath, [...args, ...subPathArgs]);
+                return client(subClientPath, ...args.concat(...subPathArgs));
             },
             get: (options = {}) => {
                 const url = urlHelpers_1.buildRequestUrl(baseUrl, path, args, options);

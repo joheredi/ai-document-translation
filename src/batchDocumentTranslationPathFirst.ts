@@ -259,7 +259,7 @@ export const createBatchDocumentTranslationPathFirst: BatchDocumentTranslationPa
     return ({
       subClient: (subPath, ...subPathArgs) => {
         const subClientPath = `${path}${subPath}` as any;
-        return client(subClientPath, [...args, ...subPathArgs] as any);
+        return client(subClientPath, ...(args.concat(...subPathArgs) as any));
       },
       get: (options: RequestParameters = {}) => {
         const url = buildRequestUrl(baseUrl, path, args, options);

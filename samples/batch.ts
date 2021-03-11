@@ -20,10 +20,7 @@ const batchRequest: BatchSubmissionRequest = {
       source: {
         sourceUrl,
       },
-      targets: [
-        { targetUrl, language: "es", storageSource: "AzureBlob" },
-        { targetUrl, language: "fr", storageSource: "AzureBlob" },
-      ],
+      targets: [{ targetUrl, language: "es", storageSource: "AzureBlob" }],
     },
   ],
 };
@@ -42,10 +39,10 @@ async function samplePathFirst() {
     throw batchResult.body.error;
   }
 
-  const jobUrl = batchResult.headers["operation-location"];
-  const jobId = extractJobId(jobUrl);
+  const batchStatusUrl = batchResult.headers["operation-location"];
+  const batchId = extractJobId(batchStatusUrl);
 
-  const batchJob = batch.subClient("/:id", jobId);
+  const batchJob = batch.subClient("/:id", batchId);
 
   let job = await batchJob.get();
 
@@ -156,7 +153,7 @@ async function sampleVerbFirst() {
 
 async function main() {
   await samplePathFirst();
-  // await sampleVerbFirst();
+  await sampleVerbFirst();
 }
 
 main().catch(console.error);
