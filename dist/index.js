@@ -15,6 +15,7 @@ var batchDocumentTranslationVerbFirst_1 = require("./batchDocumentTranslationVer
 Object.defineProperty(exports, "createBatchDocumentTranslationVerbFirst", { enumerable: true, get: function () { return batchDocumentTranslationVerbFirst_1.createBatchDocumentTranslationVerbFirst; } });
 var batchDocumentTranslationPathFirst_1 = require("./batchDocumentTranslationPathFirst");
 Object.defineProperty(exports, "createBatchDocumentTranslationPathFirst", { enumerable: true, get: function () { return batchDocumentTranslationPathFirst_1.createBatchDocumentTranslationPathFirst; } });
+__exportStar(require("./storageHelper"), exports);
 __exportStar(require("./models"), exports);
 __exportStar(require("./parameters"), exports);
 __exportStar(require("./responses"), exports);

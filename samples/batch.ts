@@ -2,6 +2,7 @@ import {
   BatchSubmissionRequest,
   createBatchDocumentTranslationPathFirst as DocumentTranslationPathFirst,
   createBatchDocumentTranslationVerbFirst as DocumentTranslationVerbFirst,
+  clearTargetStorageContainer,
 } from "../src";
 import { config } from "dotenv";
 
@@ -27,6 +28,8 @@ const batchRequest: BatchSubmissionRequest = {
 
 async function samplePathFirst() {
   console.log("==== Path First");
+  // Make sure that the target url is clean
+  await clearTargetStorageContainer(targetUrl);
   const client = DocumentTranslationPathFirst({ key }, endpoint);
   const batch = client.path("/batches");
 
@@ -94,6 +97,8 @@ function extractJobId(jobUrl: string) {
 
 async function sampleVerbFirst() {
   console.log("==== Verb First");
+  // Make sure that the target url is clean
+  await clearTargetStorageContainer(targetUrl);
   const client = DocumentTranslationVerbFirst({ key }, endpoint);
 
   // Submit a batch
