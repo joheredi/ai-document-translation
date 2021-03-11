@@ -146,7 +146,7 @@ export interface DocumentStatusResponse {
 }
 
 // @public (undocumented)
-export type ErrorCodeV2 = string;
+export type ErrorCodeV2 = "InvalidRequest" | "InvalidArgument" | "InternalServerError" | "ServiceUnavailable" | "ResourceNotFound" | "Unauthorized" | "RequestRateTooHigh";
 
 // @public (undocumented)
 export interface ErrorResponseV2 {
@@ -442,7 +442,7 @@ export interface SourceInput {
 }
 
 // @public (undocumented)
-export type Status = string;
+export type Status = "NotStarted" | "Running" | "Succeeded" | "Failed" | "Cancelled" | "Cancelling" | "ValidationFailed";
 
 // @public (undocumented)
 export interface StatusSummary {
@@ -463,15 +463,15 @@ export interface StatusSummary {
 }
 
 // @public (undocumented)
-export type StorageInputType = string;
+export type StorageInputType = "Folder" | "File";
 
 // @public (undocumented)
-export type StorageSource = string;
+export type StorageSource = "AzureBlob";
 
 // @public (undocumented)
 export interface StorageSourceListResult {
     // (undocumented)
-    value: "" | "one";
+    value: StorageSource;
 }
 
 // Warning: (ae-forgotten-export) The symbol "SubmitBatchRequest202Properties" needs to be exported by the entry point index.d.ts
@@ -526,8 +526,8 @@ export interface TargetInput {
 
 // Warnings were encountered during analysis:
 //
-// src/batchDocumentTranslationPathFirst.ts:213:3 - (ae-forgotten-export) The symbol "PathClient" needs to be exported by the entry point index.d.ts
-// src/batchDocumentTranslationPathFirst.ts:214:3 - (ae-forgotten-export) The symbol "PathUnchecked" needs to be exported by the entry point index.d.ts
+// src/batchDocumentTranslationPathFirst.ts:214:3 - (ae-forgotten-export) The symbol "PathClient" needs to be exported by the entry point index.d.ts
+// src/batchDocumentTranslationPathFirst.ts:215:3 - (ae-forgotten-export) The symbol "PathUnchecked" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
