@@ -476,11 +476,11 @@ declare type PathReturn<T extends keyof Routes_2> = AllSubPaths<T> extends never
 } & Routes_2[T];
 
 declare type PathUnchecked = <T extends string>(path: T, ...args: RouteParams_2<T>) => {
-    post(options: RequestParameters): Promise<PathUncheckedResponse>;
-    put(options: RequestParameters): Promise<PathUncheckedResponse>;
-    patch(options: RequestParameters): Promise<PathUncheckedResponse>;
-    get(options: RequestParameters): Promise<PathUncheckedResponse>;
-    delete(options: RequestParameters): Promise<PathUncheckedResponse>;
+    post(options?: RequestParameters): Promise<PathUncheckedResponse>;
+    put(options?: RequestParameters): Promise<PathUncheckedResponse>;
+    patch(options?: RequestParameters): Promise<PathUncheckedResponse>;
+    get(options?: RequestParameters): Promise<PathUncheckedResponse>;
+    delete(options?: RequestParameters): Promise<PathUncheckedResponse>;
 };
 
 declare type PathUncheckedResponse = PipelineResponse_2 & {

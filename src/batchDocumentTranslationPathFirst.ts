@@ -197,11 +197,11 @@ type PathUnchecked = <T extends string>(
   path: T,
   ...args: RouteParams<T>
 ) => {
-  post(options: RequestParameters): Promise<PathUncheckedResponse>;
-  put(options: RequestParameters): Promise<PathUncheckedResponse>;
-  patch(options: RequestParameters): Promise<PathUncheckedResponse>;
-  get(options: RequestParameters): Promise<PathUncheckedResponse>;
-  delete(options: RequestParameters): Promise<PathUncheckedResponse>;
+  post(options?: RequestParameters): Promise<PathUncheckedResponse>;
+  put(options?: RequestParameters): Promise<PathUncheckedResponse>;
+  patch(options?: RequestParameters): Promise<PathUncheckedResponse>;
+  get(options?: RequestParameters): Promise<PathUncheckedResponse>;
+  delete(options?: RequestParameters): Promise<PathUncheckedResponse>;
 };
 
 export type BatchDocumentTranslationPathFirst = (

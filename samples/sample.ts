@@ -15,8 +15,8 @@ async function samplePathFirst() {
   const formatsResult = await client.path("/documents/formats").get();
 
   if (formatsResult.status === 200) {
-    for (const format of formatsResult.body.value) {
-      console.log(format.format);
+    for (const item of formatsResult.body.value) {
+      console.log(item.format);
     }
   }
 }
