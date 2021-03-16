@@ -265,8 +265,8 @@ export interface BatchDocumentTranslationVerbFirst {
   requestUnchecked: RequestUnchecked;
 }
 export function createBatchDocumentTranslationVerbFirst(
-  credentials: TokenCredential | KeyCredential,
   endpoint: string,
+  credentials: TokenCredential | KeyCredential,
   options?: PipelineOptions
 ): BatchDocumentTranslationVerbFirst {
   const baseUrl = "{endpoint}/translator/text/batch/v1.0-preview.1".replace(
@@ -321,7 +321,7 @@ async function sendRequest<R extends keyof Routes>(
     accept: "application/json",
     "content-type": "application/json",
     ...(argumentsDetails.options.headers
-      ? argumentsDetails.options.headers.toJSON()
+      ? argumentsDetails.options.headers
       : {}),
   });
 

@@ -180,9 +180,9 @@ interface Routes {
 type RouteParams<
   TRoute extends string
 > = TRoute extends `:${infer _Param}/${infer Tail}`
-  ? [string, ...RouteParams<Tail>]
+  ? [pathParam: string, ...pathParams: RouteParams<Tail>]
   : TRoute extends `:${infer _Param}`
-  ? [string]
+  ? [pathParam: string]
   : TRoute extends `${infer _Prefix}:${infer Tail}`
   ? RouteParams<`:${Tail}`>
   : [];
@@ -206,8 +206,8 @@ type PathUnchecked = <T extends string>(
 };
 
 export type BatchDocumentTranslationPathFirst = (
-  creds: TokenCredential | KeyCredential,
   endpoint: string,
+  creds: TokenCredential | KeyCredential,
   options?: PipelineOptions
 ) => {
   // Path can take path parameter that matches any of the leaf paths in Routes
@@ -241,8 +241,8 @@ type HasSubPaths<
 > = LeafRoutes extends `${BasePath}/${infer SubRoute}` ? `/${SubRoute}` : never;
 
 export const createBatchDocumentTranslationPathFirst: BatchDocumentTranslationPathFirst = (
-  credentials,
   endpoint,
+  credentials,
   options?: PipelineOptions
 ) => {
   const baseUrl = "{endpoint}/translator/text/batch/v1.0-preview.1".replace(
@@ -301,7 +301,7 @@ async function sendRequest(
   const headers = createHttpHeaders({
     accept: "application/json",
     "content-type": "application/json; charset=UTF-8",
-    ...(options.headers ? options.headers.toJSON() : {}),
+    ...(options.headers ? options.headers : {}),
   });
 
   let body = undefined;

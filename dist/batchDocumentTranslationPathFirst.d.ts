@@ -27,7 +27,7 @@ interface Routes {
         get(options?: RequestParameters): Promise<GetDocumentStorageSource200Response | GetDocumentStorageSource429Response | GetDocumentStorageSource500Response | GetDocumentStorageSource503Response>;
     };
 }
-declare type RouteParams<TRoute extends string> = TRoute extends `:${infer _Param}/${infer Tail}` ? [string, ...RouteParams<Tail>] : TRoute extends `:${infer _Param}` ? [string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`:${Tail}`> : [];
+declare type RouteParams<TRoute extends string> = TRoute extends `:${infer _Param}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams<Tail>] : TRoute extends `:${infer _Param}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams<`:${Tail}`> : [];
 declare type PathClient = <T extends keyof Routes>(path: T, ...args: RouteParams<T>) => PathReturn<T>;
 declare type PathUncheckedResponse = PipelineResponse & {
     body: any;
@@ -39,7 +39,7 @@ declare type PathUnchecked = <T extends string>(path: T, ...args: RouteParams<T>
     get(options?: RequestParameters): Promise<PathUncheckedResponse>;
     delete(options?: RequestParameters): Promise<PathUncheckedResponse>;
 };
-export declare type BatchDocumentTranslationPathFirst = (creds: TokenCredential | KeyCredential, endpoint: string, options?: PipelineOptions) => {
+export declare type BatchDocumentTranslationPathFirst = (endpoint: string, creds: TokenCredential | KeyCredential, options?: PipelineOptions) => {
     path: PathClient;
     pathUnckecked: PathUnchecked;
 };

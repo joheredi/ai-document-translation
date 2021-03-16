@@ -1,5 +1,5 @@
 import { ErrorResponseV2, BatchStatusResponse, DocumentStatusDetail, BatchStatusDetail, DocumentStatusResponse, FileFormatListResult, StorageSourceListResult } from "./models";
-import { PipelineResponse as PipelineResponseInternal, HttpHeaders } from "@azure/core-https";
+import { PipelineResponse as PipelineResponseInternal, RawHttpHeaders } from "@azure/core-https";
 export declare type PipelineResponse = PipelineResponseInternal & {
     body: unknown;
 };
@@ -12,7 +12,7 @@ interface SubmitBatchRequest202Headers {
 export declare type SubmitBatchRequest202Response = SubmitBatchRequest202Properties & PipelineResponse;
 interface SubmitBatchRequest202Properties {
     status: 202;
-    headers: SubmitBatchRequest202Headers & HttpHeaders;
+    headers: SubmitBatchRequest202Headers & RawHttpHeaders;
 }
 export declare type SubmitBatchRequest400Response = SubmitBatchRequest400Properties & PipelineResponse;
 interface SubmitBatchRequest400Properties {
@@ -47,7 +47,7 @@ export declare type GetOperations200Response = GetOperations200Properties & Pipe
 interface GetOperations200Properties {
     status: 200;
     body: BatchStatusResponse;
-    headers: GetOperations200Headers & HttpHeaders;
+    headers: GetOperations200Headers & RawHttpHeaders;
 }
 export declare type GetOperations400Response = GetOperations400Properties & PipelineResponse;
 interface GetOperations400Properties {
@@ -82,7 +82,7 @@ export declare type GetDocumentStatus200Response = GetDocumentStatus200Propertie
 interface GetDocumentStatus200Properties {
     status: 200;
     body: DocumentStatusDetail;
-    headers: GetDocumentStatus200Headers & HttpHeaders;
+    headers: GetDocumentStatus200Headers & RawHttpHeaders;
 }
 export declare type GetDocumentStatus401Response = GetDocumentStatus401Properties & PipelineResponse;
 interface GetDocumentStatus401Properties {
@@ -117,7 +117,7 @@ export declare type GetOperationStatus200Response = GetOperationStatus200Propert
 interface GetOperationStatus200Properties {
     status: 200;
     body: BatchStatusDetail;
-    headers: GetOperationStatus200Headers & HttpHeaders;
+    headers: GetOperationStatus200Headers & RawHttpHeaders;
 }
 export declare type GetOperationStatus401Response = GetOperationStatus401Properties & PipelineResponse;
 interface GetOperationStatus401Properties {
@@ -182,7 +182,7 @@ export declare type GetOperationDocumentsStatus200Response = GetOperationDocumen
 interface GetOperationDocumentsStatus200Properties {
     status: 200;
     body: DocumentStatusResponse;
-    headers: GetOperationDocumentsStatus200Headers & HttpHeaders;
+    headers: GetOperationDocumentsStatus200Headers & RawHttpHeaders;
 }
 export declare type GetOperationDocumentsStatus400Response = GetOperationDocumentsStatus400Properties & PipelineResponse;
 interface GetOperationDocumentsStatus400Properties {

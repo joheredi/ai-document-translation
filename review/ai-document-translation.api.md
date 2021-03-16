@@ -4,14 +4,14 @@
 
 ```ts
 
-import { HttpHeaders } from '@azure/core-https';
 import { KeyCredential } from '@azure/core-auth';
 import { PipelineOptions } from '@azure/core-https';
 import { PipelineResponse as PipelineResponse_2 } from '@azure/core-https';
+import { RawHttpHeaders } from '@azure/core-https';
 import { TokenCredential } from '@azure/core-auth';
 
 // @public (undocumented)
-export type BatchDocumentTranslationPathFirst = (creds: TokenCredential | KeyCredential, endpoint: string, options?: PipelineOptions) => {
+export type BatchDocumentTranslationPathFirst = (endpoint: string, creds: TokenCredential | KeyCredential, options?: PipelineOptions) => {
     path: PathClient;
     pathUnckecked: PathUnchecked;
 };
@@ -102,10 +102,13 @@ export type CancelOperation503Response = CancelOperation503Properties & Pipeline
 export type CancelOperationParameters = RequestParameters;
 
 // @public (undocumented)
+export function clearTargetStorageContainer(targetPath: string): Promise<void>;
+
+// @public (undocumented)
 export const createBatchDocumentTranslationPathFirst: BatchDocumentTranslationPathFirst;
 
 // @public (undocumented)
-export function createBatchDocumentTranslationVerbFirst(credentials: TokenCredential | KeyCredential, endpoint: string, options?: PipelineOptions): BatchDocumentTranslationVerbFirst;
+export function createBatchDocumentTranslationVerbFirst(endpoint: string, credentials: TokenCredential | KeyCredential, options?: PipelineOptions): BatchDocumentTranslationVerbFirst;
 
 // @public (undocumented)
 export interface DocumentFilter {
@@ -417,7 +420,7 @@ export type PipelineResponse = PipelineResponse_2 & {
 // @public (undocumented)
 export type RequestParameters = {
     timeout?: number;
-    headers?: HttpHeaders;
+    headers?: RawHttpHeaders;
     body?: unknown;
     queryParameters?: {
         [key: string]: any;

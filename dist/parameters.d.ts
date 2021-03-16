@@ -1,8 +1,8 @@
 import { BatchSubmissionRequest } from "./models";
-import { HttpHeaders } from "@azure/core-https";
+import { RawHttpHeaders } from "@azure/core-https";
 export declare type RequestParameters = {
     timeout?: number;
-    headers?: HttpHeaders;
+    headers?: RawHttpHeaders;
     body?: unknown;
     queryParameters?: {
         [key: string]: any;

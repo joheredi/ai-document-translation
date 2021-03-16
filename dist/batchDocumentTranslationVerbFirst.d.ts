@@ -103,6 +103,6 @@ export interface BatchDocumentTranslationVerbFirst {
     request: Request;
     requestUnchecked: RequestUnchecked;
 }
-export declare function createBatchDocumentTranslationVerbFirst(credentials: TokenCredential | KeyCredential, endpoint: string, options?: PipelineOptions): BatchDocumentTranslationVerbFirst;
+export declare function createBatchDocumentTranslationVerbFirst(endpoint: string, credentials: TokenCredential | KeyCredential, options?: PipelineOptions): BatchDocumentTranslationVerbFirst;
 export {};
 //# sourceMappingURL=batchDocumentTranslationVerbFirst.d.ts.map

@@ -11,7 +11,7 @@ const key = process.env["API_KEY"] || "<API KEY>";
 
 async function samplePathFirst() {
   console.log("==== Path First");
-  const client = DocumentTranslationPathFirst({ key }, endpoint);
+  const client = DocumentTranslationPathFirst(endpoint, { key });
   const formatsResult = await client.path("/documents/formats").get();
 
   if (formatsResult.status === 200) {
@@ -23,7 +23,7 @@ async function samplePathFirst() {
 
 async function sampleVerbFirst() {
   console.log("==== Verb First");
-  const client = DocumentTranslationVerbFirst({ key }, endpoint);
+  const client = DocumentTranslationVerbFirst(endpoint, { key });
   const formatsResult = await client.request("GET /documents/formats");
 
   if (formatsResult.status === 200) {

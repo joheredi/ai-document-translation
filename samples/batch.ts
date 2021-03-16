@@ -30,7 +30,7 @@ async function samplePathFirst() {
   console.log("==== Path First");
   // Make sure that the target url is clean
   await clearTargetStorageContainer(targetUrl);
-  const client = DocumentTranslationPathFirst({ key }, endpoint);
+  const client = DocumentTranslationPathFirst(endpoint, { key });
   const batch = client.path("/batches");
 
   // Submit a batch for translation
@@ -99,7 +99,7 @@ async function sampleVerbFirst() {
   console.log("==== Verb First");
   // Make sure that the target url is clean
   await clearTargetStorageContainer(targetUrl);
-  const client = DocumentTranslationVerbFirst({ key }, endpoint);
+  const client = DocumentTranslationVerbFirst(endpoint, { key });
 
   // Submit a batch
   const batchResult = await client.request("POST /batches", {

@@ -34,9 +34,9 @@ az cognitiveservices account keys list --resource-group <your-resource-group-nam
 Once you have an API key and endpoint, you can use a `KeyCredential` object to authenticate the client as follows:
 
 ```js
-import { createBatchDocumentTranslationVerbFirst as DocumentTranslation } from "@azure/ai-document-translation";
+import { createBatchDocumentTranslationVerbFirst } from "@azure/ai-document-translation";
 
-const client = DocumentTranslation({ key: "<API key>" }, "<endpoint>");
+const client = createBatchDocumentTranslationVerbFirst("<endpoint>", { key: "<API key>" });
 ```
 
 #### Using an Azure Active Directory Credential
@@ -54,10 +54,10 @@ Set the values of the client ID, tenant ID, and client secret of the AAD applica
 
 ```js
 // import {createBatchDocumentTranslationVerbFirst as DocumentTranslation} from @azure/ai-document-translation;
-import { createBatchDocumentTranslationPathFirst as DocumentTranslation } from "@azure/ai-document-translation";
+import { createBatchDocumentTranslationPathFirst } from "@azure/ai-document-translation";
 import { DefaultAzureCredential } from "@azure/identity";
 
-const client = DocumentTranslation(new DefaultAzureCredential(), "<endpoint>");
+const client = createBatchDocumentTranslationPathFirst("<endpoint>", new DefaultAzureCredential());
 ```
 
 ### Samples with Path First
@@ -65,12 +65,12 @@ const client = DocumentTranslation(new DefaultAzureCredential(), "<endpoint>");
 #### Call an endpoint
 
 ```typescript
-import { createBatchDocumentTranslationPathFirst as DocumentTranslation } from "@azure/ai-document-translation";
+import { createBatchDocumentTranslationPathFirst } from "@azure/ai-document-translation";
 
 const endpoint = process.env["ENDPOINT"] || "";
 const key = process.env["API_KEY"] || "<API KEY>";
 
-const client = createBatchDocumentTranslationPathFirst({ key }, endpoint);
+const client = createBatchDocumentTranslationPathFirst(endpoint, { key });
 const formatsResult = await client.path("/documents/formats").get();
 
 if (formatsResult.status === 200) {
@@ -83,12 +83,12 @@ if (formatsResult.status === 200) {
 ### Call an arbitrary endpoint with pathUnchecked
 
 ```typescript
-import { createBatchDocumentTranslationPathFirst as DocumentTranslation } from "@azure/ai-document-translation";
+import { createBatchDocumentTranslationPathFirst } from "@azure/ai-document-translation";
 
 const endpoint = process.env["ENDPOINT"] || "";
 const key = process.env["API_KEY"] || "<API KEY>";
 
-const client = createBatchDocumentTranslationPathFirst({ key }, endpoint);
+const client = createBatchDocumentTranslationPathFirst(endpoint, { key });
 const formatsResult = await client.pathUnckecked("/documents/formats").get();
 
 if (formatsResult.status === 200) {
@@ -103,12 +103,12 @@ if (formatsResult.status === 200) {
 #### Call an endpoint
 
 ```typescript
-import { createBatchDocumentTranslationVerbFirst as DocumentTranslation } from "@azure/ai-document-translation";
+import { createBatchDocumentTranslationVerbFirst } from "@azure/ai-document-translation";
 
 const endpoint = process.env["ENDPOINT"] || "";
 const key = process.env["API_KEY"] || "<API KEY>";
 
-const client = createBatchDocumentTranslationVerbFirst({ key }, endpoint);
+const client = createBatchDocumentTranslationVerbFirst(endpoint, { key });
 const formatsResult = await client.request("GET /documents/formats");
 
 if (formatsResult.status === 200) {
@@ -121,12 +121,12 @@ if (formatsResult.status === 200) {
 ### Call an arbitrary endpoint with requestUnchecked
 
 ```typescript
-import { createBatchDocumentTranslationVerbFirst as DocumentTranslation } from "@azure/ai-document-translation";
+import { createBatchDocumentTranslationVerbFirst } from "@azure/ai-document-translation";
 
 const endpoint = process.env["ENDPOINT"] || "";
 const key = process.env["API_KEY"] || "<API KEY>";
 
-const client = createBatchDocumentTranslationVerbFirst({ key }, endpoint);
+const client = createBatchDocumentTranslationVerbFirst(endpoint, { key });
 const formatsResult = await client.requestUnchecked("GET /documents/formats");
 
 if (formatsResult.status === 200) {

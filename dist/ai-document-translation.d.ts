@@ -1,7 +1,7 @@
-import { HttpHeaders } from '@azure/core-https';
 import { KeyCredential } from '@azure/core-auth';
 import { PipelineOptions } from '@azure/core-https';
 import { PipelineResponse as PipelineResponse_2 } from '@azure/core-https';
+import { RawHttpHeaders } from '@azure/core-https';
 import { TokenCredential } from '@azure/core-auth';
 
 /** Gets all leaf nodes starting from BasePath */
@@ -9,7 +9,7 @@ declare type AllSubPaths<BasePath extends keyof Routes_2> = HasSubPaths<BasePath
 
 declare type AnyRequired<T> = {} extends T ? false : true;
 
-export declare type BatchDocumentTranslationPathFirst = (creds: TokenCredential | KeyCredential, endpoint: string, options?: PipelineOptions) => {
+export declare type BatchDocumentTranslationPathFirst = (endpoint: string, creds: TokenCredential | KeyCredential, options?: PipelineOptions) => {
     path: PathClient;
     pathUnckecked: PathUnchecked;
 };
@@ -90,9 +90,11 @@ export declare type CancelOperation503Response = CancelOperation503Properties & 
 
 export declare type CancelOperationParameters = RequestParameters;
 
+export declare function clearTargetStorageContainer(targetPath: string): Promise<void>;
+
 export declare const createBatchDocumentTranslationPathFirst: BatchDocumentTranslationPathFirst;
 
-export declare function createBatchDocumentTranslationVerbFirst(credentials: TokenCredential | KeyCredential, endpoint: string, options?: PipelineOptions): BatchDocumentTranslationVerbFirst;
+export declare function createBatchDocumentTranslationVerbFirst(endpoint: string, credentials: TokenCredential | KeyCredential, options?: PipelineOptions): BatchDocumentTranslationVerbFirst;
 
 export declare interface DocumentFilter {
     prefix?: string;
@@ -176,7 +178,7 @@ declare interface GetDocumentStatus200Headers {
 declare interface GetDocumentStatus200Properties {
     status: 200;
     body: DocumentStatusDetail;
-    headers: GetDocumentStatus200Headers & HttpHeaders;
+    headers: GetDocumentStatus200Headers & RawHttpHeaders;
 }
 
 export declare type GetDocumentStatus200Response = GetDocumentStatus200Properties & PipelineResponse;
@@ -282,7 +284,7 @@ declare interface GetOperationDocumentsStatus200Headers {
 declare interface GetOperationDocumentsStatus200Properties {
     status: 200;
     body: DocumentStatusResponse;
-    headers: GetOperationDocumentsStatus200Headers & HttpHeaders;
+    headers: GetOperationDocumentsStatus200Headers & RawHttpHeaders;
 }
 
 export declare type GetOperationDocumentsStatus200Response = GetOperationDocumentsStatus200Properties & PipelineResponse;
@@ -348,7 +350,7 @@ declare interface GetOperations200Headers {
 declare interface GetOperations200Properties {
     status: 200;
     body: BatchStatusResponse;
-    headers: GetOperations200Headers & HttpHeaders;
+    headers: GetOperations200Headers & RawHttpHeaders;
 }
 
 export declare type GetOperations200Response = GetOperations200Properties & PipelineResponse;
@@ -407,7 +409,7 @@ declare interface GetOperationStatus200Headers {
 declare interface GetOperationStatus200Properties {
     status: 200;
     body: BatchStatusDetail;
-    headers: GetOperationStatus200Headers & HttpHeaders;
+    headers: GetOperationStatus200Headers & RawHttpHeaders;
 }
 
 export declare type GetOperationStatus200Response = GetOperationStatus200Properties & PipelineResponse;
@@ -522,7 +524,7 @@ declare type RequestOptions<T extends keyof Routes> = AnyRequired<Routes[T]["opt
 
 export declare type RequestParameters = {
     timeout?: number;
-    headers?: HttpHeaders;
+    headers?: RawHttpHeaders;
     body?: unknown;
     queryParameters?: {
         [key: string]: any;
@@ -553,7 +555,7 @@ export declare type RequestUncheckedResponse = PipelineResponse & {
 
 declare type RouteParams<TRoute extends string> = TRoute extends `${infer _Head}{${infer _Param}}${infer Tail}` ? [pathParam: string, ...pathParam: RouteParams<Tail>] : TRoute extends `${infer _Head}{${infer _Param}}` ? [string] : [];
 
-declare type RouteParams_2<TRoute extends string> = TRoute extends `:${infer _Param}/${infer Tail}` ? [string, ...RouteParams_2<Tail>] : TRoute extends `:${infer _Param}` ? [string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams_2<`:${Tail}`> : [];
+declare type RouteParams_2<TRoute extends string> = TRoute extends `:${infer _Param}/${infer Tail}` ? [pathParam: string, ...pathParams: RouteParams_2<Tail>] : TRoute extends `:${infer _Param}` ? [pathParam: string] : TRoute extends `${infer _Prefix}:${infer Tail}` ? RouteParams_2<`:${Tail}`> : [];
 
 /**
  * Definition of each operation to help building their types
@@ -665,7 +667,7 @@ declare interface SubmitBatchRequest202Headers {
 
 declare interface SubmitBatchRequest202Properties {
     status: 202;
-    headers: SubmitBatchRequest202Headers & HttpHeaders;
+    headers: SubmitBatchRequest202Headers & RawHttpHeaders;
 }
 
 export declare type SubmitBatchRequest202Response = SubmitBatchRequest202Properties & PipelineResponse;

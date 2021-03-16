@@ -9,7 +9,7 @@ import {
 } from "./models";
 import {
   PipelineResponse as PipelineResponseInternal,
-  HttpHeaders,
+  RawHttpHeaders,
 } from "@azure/core-https";
 
 export type PipelineResponse = PipelineResponseInternal & { body: unknown };
@@ -24,7 +24,7 @@ export type SubmitBatchRequest202Response = SubmitBatchRequest202Properties &
 
 interface SubmitBatchRequest202Properties {
   status: 202;
-  headers: SubmitBatchRequest202Headers & HttpHeaders;
+  headers: SubmitBatchRequest202Headers & RawHttpHeaders;
 }
 
 export type SubmitBatchRequest400Response = SubmitBatchRequest400Properties &
@@ -78,7 +78,7 @@ export type GetOperations200Response = GetOperations200Properties &
 interface GetOperations200Properties {
   status: 200;
   body: BatchStatusResponse;
-  headers: GetOperations200Headers & HttpHeaders;
+  headers: GetOperations200Headers & RawHttpHeaders;
 }
 
 export type GetOperations400Response = GetOperations400Properties &
@@ -132,7 +132,7 @@ export type GetDocumentStatus200Response = GetDocumentStatus200Properties &
 interface GetDocumentStatus200Properties {
   status: 200;
   body: DocumentStatusDetail;
-  headers: GetDocumentStatus200Headers & HttpHeaders;
+  headers: GetDocumentStatus200Headers & RawHttpHeaders;
 }
 
 export type GetDocumentStatus401Response = GetDocumentStatus401Properties &
@@ -186,7 +186,7 @@ export type GetOperationStatus200Response = GetOperationStatus200Properties &
 interface GetOperationStatus200Properties {
   status: 200;
   body: BatchStatusDetail;
-  headers: GetOperationStatus200Headers & HttpHeaders;
+  headers: GetOperationStatus200Headers & RawHttpHeaders;
 }
 
 export type GetOperationStatus401Response = GetOperationStatus401Properties &
@@ -288,7 +288,7 @@ export type GetOperationDocumentsStatus200Response = GetOperationDocumentsStatus
 interface GetOperationDocumentsStatus200Properties {
   status: 200;
   body: DocumentStatusResponse;
-  headers: GetOperationDocumentsStatus200Headers & HttpHeaders;
+  headers: GetOperationDocumentsStatus200Headers & RawHttpHeaders;
 }
 
 export type GetOperationDocumentsStatus400Response = GetOperationDocumentsStatus400Properties &

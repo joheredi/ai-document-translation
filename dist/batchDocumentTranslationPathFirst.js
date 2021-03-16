@@ -13,7 +13,7 @@ exports.createBatchDocumentTranslationPathFirst = void 0;
 const urlHelpers_1 = require("./urlHelpers");
 const core_https_1 = require("@azure/core-https");
 const clientHelpers_1 = require("./clientHelpers");
-const createBatchDocumentTranslationPathFirst = (credentials, endpoint, options) => {
+const createBatchDocumentTranslationPathFirst = (endpoint, credentials, options) => {
     const baseUrl = "{endpoint}/translator/text/batch/v1.0-preview.1".replace(/{endpoint}/g, endpoint);
     const pipeline = clientHelpers_1.createDefaultPipeline(credentials, options);
     pipeline.removePolicy({ name: "exponentialRetryPolicy" });
@@ -54,7 +54,7 @@ exports.createBatchDocumentTranslationPathFirst = createBatchDocumentTranslation
 function sendRequest(method, url, pipeline, options) {
     return __awaiter(this, void 0, void 0, function* () {
         const httpClient = clientHelpers_1.getCachedDefaultHttpsClient();
-        const headers = core_https_1.createHttpHeaders(Object.assign({ accept: "application/json", "content-type": "application/json; charset=UTF-8" }, (options.headers ? options.headers.toJSON() : {})));
+        const headers = core_https_1.createHttpHeaders(Object.assign({ accept: "application/json", "content-type": "application/json; charset=UTF-8" }, (options.headers ? options.headers : {})));
         let body = undefined;
         if (options.body) {
             body = JSON.stringify(options.body);
