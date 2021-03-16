@@ -708,7 +708,7 @@ declare interface SubmitBatchRequest503Properties {
 export declare type SubmitBatchRequest503Response = SubmitBatchRequest503Properties & PipelineResponse;
 
 declare interface SubmitBatchRequestBodyParam {
-    body?: BatchSubmissionRequest;
+    body: BatchSubmissionRequest;
 }
 
 export declare type SubmitBatchRequestParameters = RequestParameters & SubmitBatchRequestBodyParam;

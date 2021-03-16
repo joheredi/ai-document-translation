@@ -9,7 +9,7 @@ export type RequestParameters = {
 };
 
 interface SubmitBatchRequestBodyParam {
-  body?: BatchSubmissionRequest;
+  body: BatchSubmissionRequest;
 }
 
 export type SubmitBatchRequestParameters = RequestParameters &
