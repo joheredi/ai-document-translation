@@ -48,7 +48,7 @@ export declare type BatchDocumentTranslationPathFirst = (endpoint: string, creds
  * Plus all the verbs supported by the path
  */
 declare type PathReturn<T extends keyof Routes> = AllSubPaths<T> extends never ? Routes[T] : {
-    subClient: <SubPath extends AllSubPaths<T>>(subPath: SubPath, ...args: RouteParams<SubPath>) => `${T}${SubPath}` extends keyof Routes ? PathReturn<`${T}${SubPath}`> : never;
+    path: <SubPath extends AllSubPaths<T>>(subPath: SubPath, ...args: RouteParams<SubPath>) => `${T}${SubPath}` extends keyof Routes ? PathReturn<`${T}${SubPath}`> : never;
 } & Routes[T];
 /** Gets all leaf nodes starting from BasePath */
 declare type AllSubPaths<BasePath extends keyof Routes> = HasSubPaths<BasePath, keyof Routes>;

@@ -222,7 +222,7 @@ export type BatchDocumentTranslationPathFirst = (
 type PathReturn<T extends keyof Routes> = AllSubPaths<T> extends never
   ? Routes[T]
   : {
-      subClient: <SubPath extends AllSubPaths<T>>(
+      path: <SubPath extends AllSubPaths<T>>(
         subPath: SubPath,
         ...args: RouteParams<SubPath>
       ) => `${T}${SubPath}` extends keyof Routes
@@ -257,7 +257,7 @@ export const createBatchDocumentTranslationPathFirst: BatchDocumentTranslationPa
     ...args: RouteParams<T>
   ) => {
     return ({
-      subClient: (subPath, ...subPathArgs) => {
+      path: (subPath, ...subPathArgs) => {
         const subClientPath = `${path}${subPath}` as any;
         return client(subClientPath, ...(args.concat(...subPathArgs) as any));
       },

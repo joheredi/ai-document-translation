@@ -1,7 +1,7 @@
 import {
   BatchSubmissionRequest,
-  createBatchDocumentTranslationPathFirst as DocumentTranslationPathFirst,
-  createBatchDocumentTranslationVerbFirst as DocumentTranslationVerbFirst,
+  createBatchDocumentTranslationPathFirst,
+  createBatchDocumentTranslationVerbFirst,
   clearTargetStorageContainer,
 } from "../src";
 import { config } from "dotenv";
@@ -27,11 +27,15 @@ const batchRequest: BatchSubmissionRequest = {
 };
 
 async function samplePathFirst() {
-  console.log("==== Path First");
-  // Make sure that the target url is clean
-  await clearTargetStorageContainer(targetUrl);
-  const client = DocumentTranslationPathFirst(endpoint, { key });
-  const batch = client.path("/batches");
+  const client = createBatchDocumentTranslationPathFirst(endpoint, { key });
+  const batchClient = client.path("/batches");
+  const batches = await batchClient.get();
+  console.log(batches);
+  const batchDocuments = batchClient.path("/:id/documents", "batchId");
+  const allDocuments = batchClient.get();
+  console.log(allDocuments);
+  const document = batchDocuments.path("/:documentId", "documentId").get();
+  console.log(document);
 
   // Submit a batch for translation
   const batchResult = await batch.post({
@@ -99,7 +103,7 @@ async function sampleVerbFirst() {
   console.log("==== Verb First");
   // Make sure that the target url is clean
   await clearTargetStorageContainer(targetUrl);
-  const client = DocumentTranslationVerbFirst(endpoint, { key });
+  const client = createBatchDocumentTranslationVerbFirst(endpoint, { key });
 
   // Submit a batch
   const batchResult = await client.request("POST /batches", {

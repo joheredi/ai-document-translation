@@ -36,7 +36,9 @@ Once you have an API key and endpoint, you can use a `KeyCredential` object to a
 ```js
 import { createBatchDocumentTranslationVerbFirst } from "@azure/ai-document-translation";
 
-const client = createBatchDocumentTranslationVerbFirst("<endpoint>", { key: "<API key>" });
+const client = createBatchDocumentTranslationVerbFirst("<endpoint>", {
+  key: "<API key>",
+});
 ```
 
 #### Using an Azure Active Directory Credential
@@ -57,7 +59,10 @@ Set the values of the client ID, tenant ID, and client secret of the AAD applica
 import { createBatchDocumentTranslationPathFirst } from "@azure/ai-document-translation";
 import { DefaultAzureCredential } from "@azure/identity";
 
-const client = createBatchDocumentTranslationPathFirst("<endpoint>", new DefaultAzureCredential());
+const client = createBatchDocumentTranslationPathFirst(
+  "<endpoint>",
+  new DefaultAzureCredential()
+);
 ```
 
 ### Samples with Path First
@@ -80,7 +85,7 @@ if (formatsResult.status === 200) {
 }
 ```
 
-### Call an arbitrary endpoint with pathUnchecked
+#### Call an arbitrary endpoint with pathUnchecked
 
 ```typescript
 import { createBatchDocumentTranslationPathFirst } from "@azure/ai-document-translation";
@@ -96,6 +101,24 @@ if (formatsResult.status === 200) {
     console.log(item.format);
   }
 }
+```
+
+#### Using a subClient
+
+The PathFirst client allows building on the current path, which can be helpful to reuse commonly used paths
+
+```typescript
+import { createBatchDocumentTranslationPathFirst } from "@azure/ai-document-translation";
+
+const client = createBatchDocumentTranslationPathFirst(endpoint, { key });
+const batchClient = client.path("/batches");
+const batches = await batchClient.get();
+console.log(batches);
+const batchDocuments = batchClient.path("/:id/documents", "batchId");
+const allDocuments = await batchClient.get();
+console.log(allDocuments);
+const document = await batchDocuments.path("/:documentId", "documentId").get();
+console.log(document);
 ```
 
 ### Samples with Verb First

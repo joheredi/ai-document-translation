@@ -19,7 +19,7 @@ const createBatchDocumentTranslationPathFirst = (endpoint, credentials, options)
     pipeline.removePolicy({ name: "exponentialRetryPolicy" });
     const client = (path, ...args) => {
         return {
-            subClient: (subPath, ...subPathArgs) => {
+            path: (subPath, ...subPathArgs) => {
                 const subClientPath = `${path}${subPath}`;
                 return client(subClientPath, ...args.concat(...subPathArgs));
             },
