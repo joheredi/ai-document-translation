@@ -1,7 +1,7 @@
 import {
   BatchSubmissionRequest,
-  createBatchDocumentTranslationPathFirst,
-  createBatchDocumentTranslationVerbFirst,
+  createBatchDocumentTranslationPathFirst as DocumentTranslationPathFirst,
+  createBatchDocumentTranslationVerbFirst as DocumentTranslationVerbFirst,
   clearTargetStorageContainer,
 } from "../src";
 import { config } from "dotenv";
@@ -27,15 +27,11 @@ const batchRequest: BatchSubmissionRequest = {
 };
 
 async function samplePathFirst() {
-  const client = createBatchDocumentTranslationPathFirst(endpoint, { key });
-  const batchClient = client.path("/batches");
-  const batches = await batchClient.get();
-  console.log(batches);
-  const batchDocuments = batchClient.path("/:id/documents", "batchId");
-  const allDocuments = batchClient.get();
-  console.log(allDocuments);
-  const document = batchDocuments.path("/:documentId", "documentId").get();
-  console.log(document);
+  console.log("==== Path First");
+  // Make sure that the target url is clean
+  await clearTargetStorageContainer(targetUrl);
+  const client = DocumentTranslationPathFirst(endpoint, { key });
+  const batch = client.path("/batches");
 
   // Submit a batch for translation
   const batchResult = await batch.post({
@@ -49,7 +45,7 @@ async function samplePathFirst() {
   const batchStatusUrl = batchResult.headers["operation-location"];
   const batchId = extractJobId(batchStatusUrl);
 
-  const batchJob = batch.subClient("/:id", batchId);
+  const batchJob = batch.path("/:id", batchId);
 
   let job = await batchJob.get();
 
@@ -68,7 +64,7 @@ async function samplePathFirst() {
     throw job.body.error;
   }
 
-  const documents = batchJob.subClient("/documents");
+  const documents = batchJob.path("/documents");
   const translatedDocuments = await documents.get();
 
   if (translatedDocuments.status !== 200) {
@@ -76,9 +72,7 @@ async function samplePathFirst() {
   }
 
   for (const document of translatedDocuments.body.value) {
-    const docDetails = await documents
-      .subClient("/:documentId", document.id)
-      .get();
+    const docDetails = await documents.path("/:documentId", document.id).get();
 
     if (docDetails.status !== 200) {
       throw docDetails.body.error;
@@ -103,7 +97,7 @@ async function sampleVerbFirst() {
   console.log("==== Verb First");
   // Make sure that the target url is clean
   await clearTargetStorageContainer(targetUrl);
-  const client = createBatchDocumentTranslationVerbFirst(endpoint, { key });
+  const client = DocumentTranslationVerbFirst(endpoint, { key });
 
   // Submit a batch
   const batchResult = await client.request("POST /batches", {

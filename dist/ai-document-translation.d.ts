@@ -474,7 +474,7 @@ declare type PathClient = <T extends keyof Routes_2>(path: T, ...args: RoutePara
  * Plus all the verbs supported by the path
  */
 declare type PathReturn<T extends keyof Routes_2> = AllSubPaths<T> extends never ? Routes_2[T] : {
-    subClient: <SubPath extends AllSubPaths<T>>(subPath: SubPath, ...args: RouteParams_2<SubPath>) => `${T}${SubPath}` extends keyof Routes_2 ? PathReturn<`${T}${SubPath}`> : never;
+    path: <SubPath extends AllSubPaths<T>>(subPath: SubPath, ...args: RouteParams_2<SubPath>) => `${T}${SubPath}` extends keyof Routes_2 ? PathReturn<`${T}${SubPath}`> : never;
 } & Routes_2[T];
 
 declare type PathUnchecked = <T extends string>(path: T, ...args: RouteParams_2<T>) => {
