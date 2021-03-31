@@ -1,21 +1,22 @@
 {
-  "name": "@azure/ai-document-translation",
+  "name": "@azure-rest/ai-document-translation",
   "version": "1.0.0-beta.1",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc --build",
+    "build": "tsc --build && npm run extract-api",
     "extract-api": "api-extractor run --local"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@azure-rest/core-client": "^1.0.0-beta.1",
     "@azure/ai-text-analytics": "^5.0.1",
     "@azure/core-auth": "^1.1.4",
-    "@azure/core-https": "^1.0.0-alpha.20200925.1",
+    "@azure/core-rest-pipeline": "^1.0.3",
     "@azure/identity": "^1.2.2",
     "@azure/storage-blob": "^12.5.0"
   },

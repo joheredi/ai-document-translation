@@ -7,430 +7,452 @@ import {
   FileFormatListResult,
   StorageSourceListResult,
 } from "./models";
-import {
-  PipelineResponse as PipelineResponseInternal,
-  RawHttpHeaders,
-} from "@azure/core-https";
+import { HttpResponse } from "@azure-rest/core-client";
+import { RawHttpHeaders } from "@azure/core-rest-pipeline";
 
-export type PipelineResponse = PipelineResponseInternal & { body: unknown };
-export type RequestUncheckedResponse = PipelineResponse & { body: any };
-
-interface SubmitBatchRequest202Headers {
+export interface SubmitBatchRequest202Headers {
+  /** Location of batch the operation */
   "operation-location"?: string;
 }
 
 export type SubmitBatchRequest202Response = SubmitBatchRequest202Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface SubmitBatchRequest202Properties {
+export interface SubmitBatchRequest202Properties {
   status: 202;
   headers: SubmitBatchRequest202Headers & RawHttpHeaders;
 }
 
 export type SubmitBatchRequest400Response = SubmitBatchRequest400Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface SubmitBatchRequest400Properties {
+export interface SubmitBatchRequest400Properties {
   status: 400;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type SubmitBatchRequest401Response = SubmitBatchRequest401Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface SubmitBatchRequest401Properties {
+export interface SubmitBatchRequest401Properties {
   status: 401;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type SubmitBatchRequest429Response = SubmitBatchRequest429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface SubmitBatchRequest429Properties {
+export interface SubmitBatchRequest429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type SubmitBatchRequest500Response = SubmitBatchRequest500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface SubmitBatchRequest500Properties {
+export interface SubmitBatchRequest500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type SubmitBatchRequest503Response = SubmitBatchRequest503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface SubmitBatchRequest503Properties {
+export interface SubmitBatchRequest503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
-interface GetOperations200Headers {
-  "Retry-After"?: string;
-  ETag?: string;
+export interface GetOperations200Headers {
+  /** Indicates how long to wait before making a new request. */
+  "retry-after"?: string;
+  /** The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control. */
+  etag?: string;
 }
 
 export type GetOperations200Response = GetOperations200Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperations200Properties {
+export interface GetOperations200Properties {
   status: 200;
-  body: BatchStatusResponse;
+  parsedBody: BatchStatusResponse;
   headers: GetOperations200Headers & RawHttpHeaders;
 }
 
 export type GetOperations400Response = GetOperations400Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperations400Properties {
+export interface GetOperations400Properties {
   status: 400;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperations401Response = GetOperations401Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperations401Properties {
+export interface GetOperations401Properties {
   status: 401;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperations429Response = GetOperations429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperations429Properties {
+export interface GetOperations429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperations500Response = GetOperations500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperations500Properties {
+export interface GetOperations500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperations503Response = GetOperations503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperations503Properties {
+export interface GetOperations503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
-interface GetDocumentStatus200Headers {
-  "Retry-After"?: string;
-  ETag?: string;
+export interface GetDocumentStatus200Headers {
+  /** Indicates how long to wait before making a new request. */
+  "retry-after"?: string;
+  /** The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control. */
+  etag?: string;
 }
 
 export type GetDocumentStatus200Response = GetDocumentStatus200Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStatus200Properties {
+export interface GetDocumentStatus200Properties {
   status: 200;
-  body: DocumentStatusDetail;
+  parsedBody: DocumentStatusDetail;
   headers: GetDocumentStatus200Headers & RawHttpHeaders;
 }
 
 export type GetDocumentStatus401Response = GetDocumentStatus401Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStatus401Properties {
+export interface GetDocumentStatus401Properties {
   status: 401;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetDocumentStatus404Response = GetDocumentStatus404Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStatus404Properties {
+export interface GetDocumentStatus404Properties {
   status: 404;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetDocumentStatus429Response = GetDocumentStatus429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStatus429Properties {
+export interface GetDocumentStatus429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetDocumentStatus500Response = GetDocumentStatus500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStatus500Properties {
+export interface GetDocumentStatus500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetDocumentStatus503Response = GetDocumentStatus503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStatus503Properties {
+export interface GetDocumentStatus503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
-interface GetOperationStatus200Headers {
-  "Retry-After"?: string;
-  ETag?: string;
+export interface GetOperationStatus200Headers {
+  /** Indicates how long to wait before making a new request. */
+  "retry-after"?: string;
+  /** The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control. */
+  etag?: string;
 }
 
 export type GetOperationStatus200Response = GetOperationStatus200Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationStatus200Properties {
+export interface GetOperationStatus200Properties {
   status: 200;
-  body: BatchStatusDetail;
+  parsedBody: BatchStatusDetail;
   headers: GetOperationStatus200Headers & RawHttpHeaders;
 }
 
 export type GetOperationStatus401Response = GetOperationStatus401Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationStatus401Properties {
+export interface GetOperationStatus401Properties {
   status: 401;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationStatus404Response = GetOperationStatus404Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationStatus404Properties {
+export interface GetOperationStatus404Properties {
   status: 404;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationStatus429Response = GetOperationStatus429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationStatus429Properties {
+export interface GetOperationStatus429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationStatus500Response = GetOperationStatus500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationStatus500Properties {
+export interface GetOperationStatus500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationStatus503Response = GetOperationStatus503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationStatus503Properties {
+export interface GetOperationStatus503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type CancelOperation200Response = CancelOperation200Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface CancelOperation200Properties {
+export interface CancelOperation200Properties {
   status: 200;
-  body: BatchStatusDetail;
+  parsedBody: BatchStatusDetail;
 }
 
 export type CancelOperation401Response = CancelOperation401Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface CancelOperation401Properties {
+export interface CancelOperation401Properties {
   status: 401;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type CancelOperation404Response = CancelOperation404Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface CancelOperation404Properties {
+export interface CancelOperation404Properties {
   status: 404;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type CancelOperation429Response = CancelOperation429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface CancelOperation429Properties {
+export interface CancelOperation429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type CancelOperation500Response = CancelOperation500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface CancelOperation500Properties {
+export interface CancelOperation500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type CancelOperation503Response = CancelOperation503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface CancelOperation503Properties {
+export interface CancelOperation503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
-interface GetOperationDocumentsStatus200Headers {
-  "Retry-After"?: string;
-  ETag?: string;
+export interface GetOperationDocumentsStatus200Headers {
+  /** Indicates how long to wait before making a new request. */
+  "retry-after"?: string;
+  /** The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control. */
+  etag?: string;
 }
 
 export type GetOperationDocumentsStatus200Response = GetOperationDocumentsStatus200Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationDocumentsStatus200Properties {
+export interface GetOperationDocumentsStatus200Properties {
   status: 200;
-  body: DocumentStatusResponse;
+  parsedBody: DocumentStatusResponse;
   headers: GetOperationDocumentsStatus200Headers & RawHttpHeaders;
 }
 
 export type GetOperationDocumentsStatus400Response = GetOperationDocumentsStatus400Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationDocumentsStatus400Properties {
+export interface GetOperationDocumentsStatus400Properties {
   status: 400;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationDocumentsStatus401Response = GetOperationDocumentsStatus401Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationDocumentsStatus401Properties {
+export interface GetOperationDocumentsStatus401Properties {
   status: 401;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationDocumentsStatus404Response = GetOperationDocumentsStatus404Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationDocumentsStatus404Properties {
+export interface GetOperationDocumentsStatus404Properties {
   status: 404;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationDocumentsStatus429Response = GetOperationDocumentsStatus429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationDocumentsStatus429Properties {
+export interface GetOperationDocumentsStatus429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationDocumentsStatus500Response = GetOperationDocumentsStatus500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationDocumentsStatus500Properties {
+export interface GetOperationDocumentsStatus500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetOperationDocumentsStatus503Response = GetOperationDocumentsStatus503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetOperationDocumentsStatus503Properties {
+export interface GetOperationDocumentsStatus503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
+}
+
+export interface GetDocumentFormats200Headers {
+  /** Indicates how long to wait before making a new request. */
+  "retry-after"?: string;
 }
 
 export type GetDocumentFormats200Response = GetDocumentFormats200Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentFormats200Properties {
+export interface GetDocumentFormats200Properties {
   status: 200;
-  body: FileFormatListResult;
+  parsedBody: FileFormatListResult;
+  headers: GetDocumentFormats200Headers & RawHttpHeaders;
 }
 
 export type GetDocumentFormats429Response = GetDocumentFormats429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentFormats429Properties {
+export interface GetDocumentFormats429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetDocumentFormats500Response = GetDocumentFormats500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentFormats500Properties {
+export interface GetDocumentFormats500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetDocumentFormats503Response = GetDocumentFormats503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentFormats503Properties {
+export interface GetDocumentFormats503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
+}
+
+export interface GetGlossaryFormats200Headers {
+  /** Indicates how long to wait before making a new request. */
+  "retry-after"?: string;
 }
 
 export type GetGlossaryFormats200Response = GetGlossaryFormats200Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetGlossaryFormats200Properties {
+export interface GetGlossaryFormats200Properties {
   status: 200;
-  body: FileFormatListResult;
+  parsedBody: FileFormatListResult;
+  headers: GetGlossaryFormats200Headers & RawHttpHeaders;
 }
 
 export type GetGlossaryFormats429Response = GetGlossaryFormats429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetGlossaryFormats429Properties {
+export interface GetGlossaryFormats429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetGlossaryFormats500Response = GetGlossaryFormats500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetGlossaryFormats500Properties {
+export interface GetGlossaryFormats500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetGlossaryFormats503Response = GetGlossaryFormats503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetGlossaryFormats503Properties {
+export interface GetGlossaryFormats503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
+}
+
+export interface GetDocumentStorageSource200Headers {
+  /** Indicates how long to wait before making a new request. */
+  "retry-after"?: string;
 }
 
 export type GetDocumentStorageSource200Response = GetDocumentStorageSource200Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStorageSource200Properties {
+export interface GetDocumentStorageSource200Properties {
   status: 200;
-  body: StorageSourceListResult;
+  parsedBody: StorageSourceListResult;
+  headers: GetDocumentStorageSource200Headers & RawHttpHeaders;
 }
 
 export type GetDocumentStorageSource429Response = GetDocumentStorageSource429Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStorageSource429Properties {
+export interface GetDocumentStorageSource429Properties {
   status: 429;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetDocumentStorageSource500Response = GetDocumentStorageSource500Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStorageSource500Properties {
+export interface GetDocumentStorageSource500Properties {
   status: 500;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }
 
 export type GetDocumentStorageSource503Response = GetDocumentStorageSource503Properties &
-  PipelineResponse;
+  HttpResponse;
 
-interface GetDocumentStorageSource503Properties {
+export interface GetDocumentStorageSource503Properties {
   status: 503;
-  body: ErrorResponseV2;
+  parsedBody: ErrorResponseV2;
 }

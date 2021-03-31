@@ -1,9 +1,5 @@
-import {
-  BatchSubmissionRequest,
-  createBatchDocumentTranslationPathFirst as DocumentTranslationPathFirst,
-  createBatchDocumentTranslationVerbFirst as DocumentTranslationVerbFirst,
-  clearTargetStorageContainer,
-} from "../src";
+import BatchDocumentTranslation from "../src";
+import { BatchSubmissionRequest } from "../src";
 import { config } from "dotenv";
 
 config();
@@ -26,11 +22,18 @@ const batchRequest: BatchSubmissionRequest = {
   ],
 };
 
-async function samplePathFirst() {
+const wait = (ms: number = 5000) => {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+};
+
+async function main() {
   console.log("==== Path First");
   // Make sure that the target url is clean
-  await clearTargetStorageContainer(targetUrl);
-  const client = DocumentTranslationPathFirst(endpoint, { key });
+  const client = BatchDocumentTranslation(endpoint, { key });
   const batch = client.path("/batches");
 
   // Submit a batch for translation
@@ -43,9 +46,8 @@ async function samplePathFirst() {
   }
 
   const batchStatusUrl = batchResult.headers["operation-location"];
-  const batchId = extractJobId(batchStatusUrl);
-
-  const batchJob = batch.path("/:id", batchId);
+  const jobId = extractJobId(batchStatusUrl);
+  const batchJob = client.pathUnchecked(batchStatusUrl);
 
   let job = await batchJob.get();
 
@@ -58,13 +60,19 @@ async function samplePathFirst() {
     if (job.status !== 200) {
       throw job.body.error;
     }
+    console.log(job.body.status);
+    if (job.body.status === "Succeeded") {
+      break;
+    }
+
+    await wait();
   }
 
   if (job.body.status !== "Succeeded") {
     throw job.body.error;
   }
 
-  const documents = batchJob.path("/documents");
+  const documents = client.path("/batches/{id}/documents", jobId);
   const translatedDocuments = await documents.get();
 
   if (translatedDocuments.status !== 200) {
@@ -72,7 +80,9 @@ async function samplePathFirst() {
   }
 
   for (const document of translatedDocuments.body.value) {
-    const docDetails = await documents.path("/:documentId", document.id).get();
+    const docDetails = await client
+      .path("/batches/{id}/documents", document.id)
+      .get();
 
     if (docDetails.status !== 200) {
       throw docDetails.body.error;
@@ -91,72 +101,6 @@ function extractJobId(jobUrl: string) {
   const parts = jobUrl.split("/");
 
   return parts[parts.length - 1];
-}
-
-async function sampleVerbFirst() {
-  console.log("==== Verb First");
-  // Make sure that the target url is clean
-  await clearTargetStorageContainer(targetUrl);
-  const client = DocumentTranslationVerbFirst(endpoint, { key });
-
-  // Submit a batch
-  const batchResult = await client.request("POST /batches", {
-    body: batchRequest,
-  });
-
-  if (batchResult.status !== 202) {
-    throw batchResult.body.error;
-  }
-
-  const jobUrl = batchResult.headers["operation-location"];
-  const batchId = extractJobId(jobUrl);
-
-  let batchJob = await client.request("GET /batches/:id", batchId);
-
-  if (batchJob.status !== 200) {
-    throw batchJob.body.error;
-  }
-
-  while (!terminalStates.includes(batchJob.body.status)) {
-    batchJob = await client.request("GET /batches/:id", batchId);
-    if (batchJob.status !== 200) {
-      throw batchJob.body.error;
-    }
-  }
-
-  if (batchJob.body.status !== "Succeeded") {
-    throw batchJob.body.error;
-  }
-
-  const translatedDocuments = await client.request(
-    "GET /batches/:id/documents",
-    batchId
-  );
-
-  if (translatedDocuments.status !== 200) {
-    throw translatedDocuments.body.error;
-  }
-
-  for (const document of translatedDocuments.body.value) {
-    const docDetails = await client.request(
-      "GET /batches/:id/documents/:documentId",
-      batchId,
-      document.id
-    );
-
-    if (docDetails.status !== 200) {
-      throw docDetails.body.error;
-    }
-
-    console.log(
-      `Document: ${docDetails.body.path} translated to ${docDetails.body.to} - Status: ${docDetails.body.status}`
-    );
-  }
-}
-
-async function main() {
-  await samplePathFirst();
-  await sampleVerbFirst();
 }
 
 main().catch(console.error);

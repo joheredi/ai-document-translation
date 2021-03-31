@@ -1,7 +1,4 @@
-import {
-  createBatchDocumentTranslationPathFirst as DocumentTranslationPathFirst,
-  createBatchDocumentTranslationVerbFirst as DocumentTranslationVerbFirst,
-} from "../dist";
+import BatchDocumentTranslation from "../";
 import { config } from "dotenv";
 
 config();
@@ -9,9 +6,9 @@ config();
 const endpoint = process.env["ENDPOINT"] || "";
 const key = process.env["API_KEY"] || "<API KEY>";
 
-async function samplePathFirst() {
+async function main() {
   console.log("==== Path First");
-  const client = DocumentTranslationPathFirst(endpoint, { key });
+  const client = BatchDocumentTranslation(endpoint, { key });
   const formatsResult = await client.path("/documents/formats").get();
 
   if (formatsResult.status === 200) {
@@ -21,18 +18,4 @@ async function samplePathFirst() {
   }
 }
 
-async function sampleVerbFirst() {
-  console.log("==== Verb First");
-  const client = DocumentTranslationVerbFirst(endpoint, { key });
-  const formatsResult = await client.request("GET /documents/formats");
-
-  if (formatsResult.status === 200) {
-    for (const format of formatsResult.body.value) {
-      console.log(format.format);
-    }
-  }
-}
-
-samplePathFirst()
-  .then(() => sampleVerbFirst())
-  .catch(console.error);
+main().catch(console.error);

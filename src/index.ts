@@ -1,12 +1,6 @@
-export {
-  createBatchDocumentTranslationVerbFirst,
-  BatchDocumentTranslationVerbFirst,
-} from "./batchDocumentTranslationVerbFirst";
-export {
-  createBatchDocumentTranslationPathFirst,
-  BatchDocumentTranslationPathFirst,
-} from "./batchDocumentTranslationPathFirst";
-export * from "./storageHelper";
+import DocumentTranslator from "./documentTranslationClient";
+export * from "./documentTranslationClient";
 export * from "./models";
 export * from "./parameters";
 export * from "./responses";
+export default DocumentTranslator;
