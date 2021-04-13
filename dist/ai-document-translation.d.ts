@@ -1,7 +1,12 @@
+/**
+ * A rest library for working with the Azure Document Translator service.
+ * @packageDocumentation
+ */
+
+import { Client } from '@azure-rest/core-client';
 import { ClientOptions } from '@azure-rest/core-client';
 import { HttpResponse } from '@azure-rest/core-client';
 import { KeyCredential } from '@azure/core-auth';
-import { PathUncheckedClient } from '@azure-rest/core-client';
 import { RawHttpHeaders } from '@azure/core-rest-pipeline';
 import { RequestParameters } from '@azure-rest/core-client';
 import { TokenCredential } from '@azure/core-auth';
@@ -25,7 +30,7 @@ export declare interface BatchStatusDetail {
     /** List of possible statuses for job or document */
     status: Status;
     /** This contains an outer error with error code, message, details, target and an inner error with more descriptive details. */
-    error?: ErrorV2;
+    error?: TranslationError;
     /** */
     summary: StatusSummary;
 }
@@ -42,65 +47,95 @@ export declare interface BatchSubmissionRequest {
     inputs: BatchRequest[];
 }
 
-export declare interface CancelOperation {
+export declare interface CancelTranslation {
     /**
      * Returns the status for a document translation request.
      * The status includes the overall request status, as well as the status for documents that are being translated as part of that request.
      */
-    get(options?: GetOperationStatusParameters): Promise<GetOperationStatus200Response | GetOperationStatus401Response | GetOperationStatus404Response | GetOperationStatus429Response | GetOperationStatus500Response | GetOperationStatus503Response>;
+    get(options?: GetTranslationStatusParameters): Promise<GetTranslationStatus200Response | GetTranslationStatus401Response | GetTranslationStatus404Response | GetTranslationStatus429Response | GetTranslationStatus500Response | GetTranslationStatus503Response>;
     /**
-     * Cancel a currently processing or queued operation.
-     * Cancel a currently processing or queued operation.
-     * An operation will not be cancelled if it is already completed or failed or cancelling. A bad request will be returned.
+     * Cancel a currently processing or queued translation.
+     * Cancel a currently processing or queued translation.
+     * A translation will not be cancelled if it is already completed or failed or cancelling. A bad request will be returned.
      * All documents that have completed translation will not be cancelled and will be charged.
      * All pending documents will be cancelled if possible.
      */
-    delete(options?: CancelOperationParameters): Promise<CancelOperation200Response | CancelOperation401Response | CancelOperation404Response | CancelOperation429Response | CancelOperation500Response | CancelOperation503Response>;
+    delete(options?: CancelTranslationParameters): Promise<CancelTranslation200Response | CancelTranslation401Response | CancelTranslation404Response | CancelTranslation429Response | CancelTranslation500Response | CancelTranslation503Response>;
 }
 
-export declare interface CancelOperation200Properties {
-    status: 200;
-    parsedBody: BatchStatusDetail;
+/**
+ * Cancel a currently processing or queued translation.
+ * Cancel a currently processing or queued translation.
+ * A translation will not be cancelled if it is already completed or failed or cancelling. A bad request will be returned.
+ * All documents that have completed translation will not be cancelled and will be charged.
+ * All pending documents will be cancelled if possible.
+ */
+export declare interface CancelTranslation200Response extends HttpResponse {
+    status: "200";
+    body: BatchStatusDetail;
 }
 
-export declare type CancelOperation200Response = CancelOperation200Properties & HttpResponse;
-
-export declare interface CancelOperation401Properties {
-    status: 401;
-    parsedBody: ErrorResponseV2;
+/**
+ * Cancel a currently processing or queued translation.
+ * Cancel a currently processing or queued translation.
+ * A translation will not be cancelled if it is already completed or failed or cancelling. A bad request will be returned.
+ * All documents that have completed translation will not be cancelled and will be charged.
+ * All pending documents will be cancelled if possible.
+ */
+export declare interface CancelTranslation401Response extends HttpResponse {
+    status: "401";
+    body: TranslationErrorResponse;
 }
 
-export declare type CancelOperation401Response = CancelOperation401Properties & HttpResponse;
-
-export declare interface CancelOperation404Properties {
-    status: 404;
-    parsedBody: ErrorResponseV2;
+/**
+ * Cancel a currently processing or queued translation.
+ * Cancel a currently processing or queued translation.
+ * A translation will not be cancelled if it is already completed or failed or cancelling. A bad request will be returned.
+ * All documents that have completed translation will not be cancelled and will be charged.
+ * All pending documents will be cancelled if possible.
+ */
+export declare interface CancelTranslation404Response extends HttpResponse {
+    status: "404";
+    body: TranslationErrorResponse;
 }
 
-export declare type CancelOperation404Response = CancelOperation404Properties & HttpResponse;
-
-export declare interface CancelOperation429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
+/**
+ * Cancel a currently processing or queued translation.
+ * Cancel a currently processing or queued translation.
+ * A translation will not be cancelled if it is already completed or failed or cancelling. A bad request will be returned.
+ * All documents that have completed translation will not be cancelled and will be charged.
+ * All pending documents will be cancelled if possible.
+ */
+export declare interface CancelTranslation429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
 }
 
-export declare type CancelOperation429Response = CancelOperation429Properties & HttpResponse;
-
-export declare interface CancelOperation500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
+/**
+ * Cancel a currently processing or queued translation.
+ * Cancel a currently processing or queued translation.
+ * A translation will not be cancelled if it is already completed or failed or cancelling. A bad request will be returned.
+ * All documents that have completed translation will not be cancelled and will be charged.
+ * All pending documents will be cancelled if possible.
+ */
+export declare interface CancelTranslation500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
 }
 
-export declare type CancelOperation500Response = CancelOperation500Properties & HttpResponse;
-
-export declare interface CancelOperation503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
+/**
+ * Cancel a currently processing or queued translation.
+ * Cancel a currently processing or queued translation.
+ * A translation will not be cancelled if it is already completed or failed or cancelling. A bad request will be returned.
+ * All documents that have completed translation will not be cancelled and will be charged.
+ * All pending documents will be cancelled if possible.
+ */
+export declare interface CancelTranslation503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
 }
 
-export declare type CancelOperation503Response = CancelOperation503Properties & HttpResponse;
-
-export declare type CancelOperationParameters = RequestParameters;
+export declare type CancelTranslationParameters = RequestParameters;
 
 export declare interface DocumentFilter {
     /**
@@ -129,7 +164,7 @@ export declare interface DocumentStatusDetail {
     /** To language */
     to: string;
     /** This contains an outer error with error code, message, details, target and an inner error with more descriptive details. */
-    error?: ErrorV2;
+    error?: TranslationError;
     /** Progress of the translation if available */
     progress: number;
     /** Document Id */
@@ -145,40 +180,15 @@ export declare interface DocumentStatusResponse {
     nextLink?: string;
 }
 
-declare function DocumentTranslation(endpoint: string, credentials: TokenCredential | KeyCredential, options?: ClientOptions): DocumentTranslationClient;
-export default DocumentTranslation;
+declare function DocumentTranslator(endpoint: string, credentials: TokenCredential | KeyCredential, options?: ClientOptions): DocumentTranslatorClient;
+export default DocumentTranslator;
 
-export declare interface DocumentTranslationClient {
+export declare type DocumentTranslatorClient = Client & {
     path: Routes;
-    pathUnchecked: PathUncheckedClient;
-}
+};
 
-export declare interface DocumentTranslationFactory {
+export declare interface DocumentTranslatorFactory {
     (endpoint: string, credentials: TokenCredential | KeyCredential, options?: ClientOptions): void;
-}
-
-export declare type ErrorCodeV2 = "InvalidRequest" | "InvalidArgument" | "InternalServerError" | "ServiceUnavailable" | "ResourceNotFound" | "Unauthorized" | "RequestRateTooHigh";
-
-export declare interface ErrorResponseV2 {
-    /** This contains an outer error with error code, message, details, target and an inner error with more descriptive details. */
-    error?: ErrorV2;
-}
-
-export declare interface ErrorV2 {
-    /** Enums containing high level error codes. */
-    code: ErrorCodeV2;
-    /** Gets high level error message. */
-    message: string;
-    /**
-     * Gets the source of the error.
-     * For example it would be "documents" or "document id" in case of invalid document.
-     */
-    target?: string;
-    /**
-     * New Inner Error format which conforms to Cognitive Services API Guidelines which is available at https://microsoft.sharepoint.com/%3Aw%3A/t/CognitiveServicesPMO/EUoytcrjuJdKpeOKIK_QRC8BPtUYQpKBi8JsWyeDMRsWlQ?e=CPq8ow.
-     * This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
-     */
-    innerError?: InnerErrorV2;
 }
 
 export declare interface FileFormat {
@@ -199,193 +209,58 @@ export declare interface FileFormatListResult {
     value: FileFormat[];
 }
 
-export declare interface GetDocumentFormats {
-    /**
-     * The list of supported document formats supported by the Document Translation service.
-     * The list includes the common file extension, as well as the content-type if using the upload API.
-     */
-    get(options?: GetDocumentFormatsParameters): Promise<GetDocumentFormats200Response | GetDocumentFormats429Response | GetDocumentFormats500Response | GetDocumentFormats503Response>;
-}
-
-export declare interface GetDocumentFormats200Headers {
-    /** Indicates how long to wait before making a new request. */
-    "retry-after"?: string;
-}
-
-export declare interface GetDocumentFormats200Properties {
-    status: 200;
-    parsedBody: FileFormatListResult;
-    headers: GetDocumentFormats200Headers & RawHttpHeaders;
-}
-
-export declare type GetDocumentFormats200Response = GetDocumentFormats200Properties & HttpResponse;
-
-export declare interface GetDocumentFormats429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetDocumentFormats429Response = GetDocumentFormats429Properties & HttpResponse;
-
-export declare interface GetDocumentFormats500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetDocumentFormats500Response = GetDocumentFormats500Properties & HttpResponse;
-
-export declare interface GetDocumentFormats503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetDocumentFormats503Response = GetDocumentFormats503Properties & HttpResponse;
-
-export declare type GetDocumentFormatsParameters = RequestParameters;
-
-export declare interface GetDocumentStatus {
+export declare interface GetDocument {
     /** Returns the translation status for a specific document based on the request Id and document Id. */
-    get(options?: GetDocumentStatusParameters): Promise<GetDocumentStatus200Response | GetDocumentStatus401Response | GetDocumentStatus404Response | GetDocumentStatus429Response | GetDocumentStatus500Response | GetDocumentStatus503Response>;
+    get(options?: GetDocumentParameters): Promise<GetDocument200Response | GetDocument401Response | GetDocument404Response | GetDocument429Response | GetDocument500Response | GetDocument503Response>;
 }
 
-export declare interface GetDocumentStatus200Headers {
+export declare interface GetDocument200Headers {
     /** Indicates how long to wait before making a new request. */
     "retry-after"?: string;
     /** The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control. */
     etag?: string;
 }
 
-export declare interface GetDocumentStatus200Properties {
-    status: 200;
-    parsedBody: DocumentStatusDetail;
-    headers: GetDocumentStatus200Headers & RawHttpHeaders;
+/** Returns the translation status for a specific document based on the request Id and document Id. */
+export declare interface GetDocument200Response extends HttpResponse {
+    status: "200";
+    body: DocumentStatusDetail;
+    headers: RawHttpHeaders & GetDocument200Headers;
 }
 
-export declare type GetDocumentStatus200Response = GetDocumentStatus200Properties & HttpResponse;
-
-export declare interface GetDocumentStatus401Properties {
-    status: 401;
-    parsedBody: ErrorResponseV2;
+/** Returns the translation status for a specific document based on the request Id and document Id. */
+export declare interface GetDocument401Response extends HttpResponse {
+    status: "401";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetDocumentStatus401Response = GetDocumentStatus401Properties & HttpResponse;
-
-export declare interface GetDocumentStatus404Properties {
-    status: 404;
-    parsedBody: ErrorResponseV2;
+/** Returns the translation status for a specific document based on the request Id and document Id. */
+export declare interface GetDocument404Response extends HttpResponse {
+    status: "404";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetDocumentStatus404Response = GetDocumentStatus404Properties & HttpResponse;
-
-export declare interface GetDocumentStatus429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
+/** Returns the translation status for a specific document based on the request Id and document Id. */
+export declare interface GetDocument429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetDocumentStatus429Response = GetDocumentStatus429Properties & HttpResponse;
-
-export declare interface GetDocumentStatus500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
+/** Returns the translation status for a specific document based on the request Id and document Id. */
+export declare interface GetDocument500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetDocumentStatus500Response = GetDocumentStatus500Properties & HttpResponse;
-
-export declare interface GetDocumentStatus503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
+/** Returns the translation status for a specific document based on the request Id and document Id. */
+export declare interface GetDocument503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetDocumentStatus503Response = GetDocumentStatus503Properties & HttpResponse;
+export declare type GetDocumentParameters = RequestParameters;
 
-export declare type GetDocumentStatusParameters = RequestParameters;
-
-export declare interface GetDocumentStorageSource {
-    /** Returns a list of storage sources/options supported by the Document Translation service. */
-    get(options?: GetDocumentStorageSourceParameters): Promise<GetDocumentStorageSource200Response | GetDocumentStorageSource429Response | GetDocumentStorageSource500Response | GetDocumentStorageSource503Response>;
-}
-
-export declare interface GetDocumentStorageSource200Headers {
-    /** Indicates how long to wait before making a new request. */
-    "retry-after"?: string;
-}
-
-export declare interface GetDocumentStorageSource200Properties {
-    status: 200;
-    parsedBody: StorageSourceListResult;
-    headers: GetDocumentStorageSource200Headers & RawHttpHeaders;
-}
-
-export declare type GetDocumentStorageSource200Response = GetDocumentStorageSource200Properties & HttpResponse;
-
-export declare interface GetDocumentStorageSource429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetDocumentStorageSource429Response = GetDocumentStorageSource429Properties & HttpResponse;
-
-export declare interface GetDocumentStorageSource500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetDocumentStorageSource500Response = GetDocumentStorageSource500Properties & HttpResponse;
-
-export declare interface GetDocumentStorageSource503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetDocumentStorageSource503Response = GetDocumentStorageSource503Properties & HttpResponse;
-
-export declare type GetDocumentStorageSourceParameters = RequestParameters;
-
-export declare interface GetGlossaryFormats {
-    /**
-     * The list of supported glossary formats supported by the Document Translation service.
-     * The list includes the common file extension used.
-     */
-    get(options?: GetGlossaryFormatsParameters): Promise<GetGlossaryFormats200Response | GetGlossaryFormats429Response | GetGlossaryFormats500Response | GetGlossaryFormats503Response>;
-}
-
-export declare interface GetGlossaryFormats200Headers {
-    /** Indicates how long to wait before making a new request. */
-    "retry-after"?: string;
-}
-
-export declare interface GetGlossaryFormats200Properties {
-    status: 200;
-    parsedBody: FileFormatListResult;
-    headers: GetGlossaryFormats200Headers & RawHttpHeaders;
-}
-
-export declare type GetGlossaryFormats200Response = GetGlossaryFormats200Properties & HttpResponse;
-
-export declare interface GetGlossaryFormats429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetGlossaryFormats429Response = GetGlossaryFormats429Properties & HttpResponse;
-
-export declare interface GetGlossaryFormats500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetGlossaryFormats500Response = GetGlossaryFormats500Properties & HttpResponse;
-
-export declare interface GetGlossaryFormats503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type GetGlossaryFormats503Response = GetGlossaryFormats503Properties & HttpResponse;
-
-export declare type GetGlossaryFormatsParameters = RequestParameters;
-
-export declare interface GetOperationDocumentsStatus {
+export declare interface GetDocuments {
     /**
      * Returns the status for all documents in a batch document translation request.
      *
@@ -396,7 +271,7 @@ export declare interface GetOperationDocumentsStatus {
      *
      * $top indicates the total number of records the user wants to be returned across all pages.
      * $skip indicates the number of records to skip from the list of document status held by the server based on the sorting method specified.  By default, we sort by descending start time.
-     * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), @nextLink will contain the link to the next page.
+     * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
      *
      * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
      * The default sorting is descending by createdDateTimeUtc.
@@ -408,73 +283,213 @@ export declare interface GetOperationDocumentsStatus {
      * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
      * This reduces the risk of the client making assumptions about the data returned.
      */
-    get(options?: GetOperationDocumentsStatusParameters): Promise<GetOperationDocumentsStatus200Response | GetOperationDocumentsStatus400Response | GetOperationDocumentsStatus401Response | GetOperationDocumentsStatus404Response | GetOperationDocumentsStatus429Response | GetOperationDocumentsStatus500Response | GetOperationDocumentsStatus503Response>;
+    get(options?: GetDocumentsParameters): Promise<GetDocuments200Response | GetDocuments400Response | GetDocuments401Response | GetDocuments404Response | GetDocuments429Response | GetDocuments500Response | GetDocuments503Response>;
 }
 
-export declare interface GetOperationDocumentsStatus200Headers {
+export declare interface GetDocuments200Headers {
     /** Indicates how long to wait before making a new request. */
     "retry-after"?: string;
     /** The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control. */
     etag?: string;
 }
 
-export declare interface GetOperationDocumentsStatus200Properties {
-    status: 200;
-    parsedBody: DocumentStatusResponse;
-    headers: GetOperationDocumentsStatus200Headers & RawHttpHeaders;
+/**
+ * Returns the status for all documents in a batch document translation request.
+ *
+ * If the number of documents in the response exceeds our paging limit, server-side paging is used.
+ * Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of document status held by the server based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled documents.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetDocuments200Response extends HttpResponse {
+    status: "200";
+    body: DocumentStatusResponse;
+    headers: RawHttpHeaders & GetDocuments200Headers;
 }
 
-export declare type GetOperationDocumentsStatus200Response = GetOperationDocumentsStatus200Properties & HttpResponse;
-
-export declare interface GetOperationDocumentsStatus400Properties {
-    status: 400;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for all documents in a batch document translation request.
+ *
+ * If the number of documents in the response exceeds our paging limit, server-side paging is used.
+ * Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of document status held by the server based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled documents.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetDocuments400Response extends HttpResponse {
+    status: "400";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationDocumentsStatus400Response = GetOperationDocumentsStatus400Properties & HttpResponse;
-
-export declare interface GetOperationDocumentsStatus401Properties {
-    status: 401;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for all documents in a batch document translation request.
+ *
+ * If the number of documents in the response exceeds our paging limit, server-side paging is used.
+ * Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of document status held by the server based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled documents.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetDocuments401Response extends HttpResponse {
+    status: "401";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationDocumentsStatus401Response = GetOperationDocumentsStatus401Properties & HttpResponse;
-
-export declare interface GetOperationDocumentsStatus404Properties {
-    status: 404;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for all documents in a batch document translation request.
+ *
+ * If the number of documents in the response exceeds our paging limit, server-side paging is used.
+ * Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of document status held by the server based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled documents.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetDocuments404Response extends HttpResponse {
+    status: "404";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationDocumentsStatus404Response = GetOperationDocumentsStatus404Properties & HttpResponse;
-
-export declare interface GetOperationDocumentsStatus429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for all documents in a batch document translation request.
+ *
+ * If the number of documents in the response exceeds our paging limit, server-side paging is used.
+ * Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of document status held by the server based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled documents.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetDocuments429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationDocumentsStatus429Response = GetOperationDocumentsStatus429Properties & HttpResponse;
-
-export declare interface GetOperationDocumentsStatus500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for all documents in a batch document translation request.
+ *
+ * If the number of documents in the response exceeds our paging limit, server-side paging is used.
+ * Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of document status held by the server based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled documents.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetDocuments500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationDocumentsStatus500Response = GetOperationDocumentsStatus500Properties & HttpResponse;
-
-export declare interface GetOperationDocumentsStatus503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for all documents in a batch document translation request.
+ *
+ * If the number of documents in the response exceeds our paging limit, server-side paging is used.
+ * Paginated responses indicate a partial result and include a continuation token in the response. The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of document status held by the server based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled documents.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetDocuments503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationDocumentsStatus503Response = GetOperationDocumentsStatus503Properties & HttpResponse;
+export declare type GetDocumentsParameters = RequestParameters & GetDocumentsQueryParam;
 
-export declare type GetOperationDocumentsStatusParameters = RequestParameters & GetOperationDocumentsStatusQueryParam;
-
-export declare interface GetOperationDocumentsStatusQueryParam {
-    queryParameters?: GetOperationDocumentsStatusQueryParamProperties;
+export declare interface GetDocumentsQueryParam {
+    queryParameters?: GetDocumentsQueryParamProperties;
 }
 
-export declare interface GetOperationDocumentsStatusQueryParamProperties {
+export declare interface GetDocumentsQueryParamProperties {
     /**
      * $top indicates the total number of records the user wants to be returned across all pages.
      *
@@ -494,7 +509,7 @@ export declare interface GetOperationDocumentsStatusQueryParamProperties {
      */
     $skip?: number;
     /**
-     * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), @nextLink will contain the link to the next page.
+     * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
      *
      * Clients MAY request server-driven paging with a specific page size by specifying a $maxpagesize preference. The server SHOULD honor this preference if the specified page size is smaller than the server's default page size.
      */
@@ -511,7 +526,148 @@ export declare interface GetOperationDocumentsStatusQueryParamProperties {
     $orderBy?: string[];
 }
 
-export declare interface GetOperations {
+export declare interface GetSupportedDocumentFormats {
+    /**
+     * The list of supported document formats supported by the Document Translation service.
+     * The list includes the common file extension, as well as the content-type if using the upload API.
+     */
+    get(options?: GetSupportedDocumentFormatsParameters): Promise<GetSupportedDocumentFormats200Response | GetSupportedDocumentFormats429Response | GetSupportedDocumentFormats500Response | GetSupportedDocumentFormats503Response>;
+}
+
+export declare interface GetSupportedDocumentFormats200Headers {
+    /** Indicates how long to wait before making a new request. */
+    "retry-after"?: string;
+}
+
+/**
+ * The list of supported document formats supported by the Document Translation service.
+ * The list includes the common file extension, as well as the content-type if using the upload API.
+ */
+export declare interface GetSupportedDocumentFormats200Response extends HttpResponse {
+    status: "200";
+    body: FileFormatListResult;
+    headers: RawHttpHeaders & GetSupportedDocumentFormats200Headers;
+}
+
+/**
+ * The list of supported document formats supported by the Document Translation service.
+ * The list includes the common file extension, as well as the content-type if using the upload API.
+ */
+export declare interface GetSupportedDocumentFormats429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
+}
+
+/**
+ * The list of supported document formats supported by the Document Translation service.
+ * The list includes the common file extension, as well as the content-type if using the upload API.
+ */
+export declare interface GetSupportedDocumentFormats500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
+}
+
+/**
+ * The list of supported document formats supported by the Document Translation service.
+ * The list includes the common file extension, as well as the content-type if using the upload API.
+ */
+export declare interface GetSupportedDocumentFormats503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
+}
+
+export declare type GetSupportedDocumentFormatsParameters = RequestParameters;
+
+export declare interface GetSupportedGlossaryFormats {
+    /**
+     * The list of supported glossary formats supported by the Document Translation service.
+     * The list includes the common file extension used.
+     */
+    get(options?: GetSupportedGlossaryFormatsParameters): Promise<GetSupportedGlossaryFormats200Response | GetSupportedGlossaryFormats429Response | GetSupportedGlossaryFormats500Response | GetSupportedGlossaryFormats503Response>;
+}
+
+export declare interface GetSupportedGlossaryFormats200Headers {
+    /** Indicates how long to wait before making a new request. */
+    "retry-after"?: string;
+}
+
+/**
+ * The list of supported glossary formats supported by the Document Translation service.
+ * The list includes the common file extension used.
+ */
+export declare interface GetSupportedGlossaryFormats200Response extends HttpResponse {
+    status: "200";
+    body: FileFormatListResult;
+    headers: RawHttpHeaders & GetSupportedGlossaryFormats200Headers;
+}
+
+/**
+ * The list of supported glossary formats supported by the Document Translation service.
+ * The list includes the common file extension used.
+ */
+export declare interface GetSupportedGlossaryFormats429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
+}
+
+/**
+ * The list of supported glossary formats supported by the Document Translation service.
+ * The list includes the common file extension used.
+ */
+export declare interface GetSupportedGlossaryFormats500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
+}
+
+/**
+ * The list of supported glossary formats supported by the Document Translation service.
+ * The list includes the common file extension used.
+ */
+export declare interface GetSupportedGlossaryFormats503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
+}
+
+export declare type GetSupportedGlossaryFormatsParameters = RequestParameters;
+
+export declare interface GetSupportedStorageSources {
+    /** Returns a list of storage sources/options supported by the Document Translation service. */
+    get(options?: GetSupportedStorageSourcesParameters): Promise<GetSupportedStorageSources200Response | GetSupportedStorageSources429Response | GetSupportedStorageSources500Response | GetSupportedStorageSources503Response>;
+}
+
+export declare interface GetSupportedStorageSources200Headers {
+    /** Indicates how long to wait before making a new request. */
+    "retry-after"?: string;
+}
+
+/** Returns a list of storage sources/options supported by the Document Translation service. */
+export declare interface GetSupportedStorageSources200Response extends HttpResponse {
+    status: "200";
+    body: StorageSourceListResult;
+    headers: RawHttpHeaders & GetSupportedStorageSources200Headers;
+}
+
+/** Returns a list of storage sources/options supported by the Document Translation service. */
+export declare interface GetSupportedStorageSources429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
+}
+
+/** Returns a list of storage sources/options supported by the Document Translation service. */
+export declare interface GetSupportedStorageSources500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
+}
+
+/** Returns a list of storage sources/options supported by the Document Translation service. */
+export declare interface GetSupportedStorageSources503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
+}
+
+export declare type GetSupportedStorageSourcesParameters = RequestParameters;
+
+export declare interface GetTranslations {
     /**
      * Use this API to submit a bulk (batch) translation request to the Document Translation service.
      * Each request can contain multiple documents and must contain a source and destination container for each document.
@@ -523,7 +679,7 @@ export declare interface GetOperations {
      * If the glossary is invalid or unreachable during translation, an error is indicated in the document status.
      * If a file with the same name already exists at the destination, it will be overwritten. The targetUrl for each target language must be unique.
      */
-    post(options?: SubmitBatchRequestParameters): Promise<SubmitBatchRequest202Response | SubmitBatchRequest400Response | SubmitBatchRequest401Response | SubmitBatchRequest429Response | SubmitBatchRequest500Response | SubmitBatchRequest503Response>;
+    post(options: StartTranslationParameters): Promise<StartTranslation202Response | StartTranslation400Response | StartTranslation401Response | StartTranslation429Response | StartTranslation500Response | StartTranslation503Response>;
     /**
      * Returns a list of batch requests submitted and the status for each request.
      * This list only contains batch requests submitted by the user (based on the resource).
@@ -535,7 +691,7 @@ export declare interface GetOperations {
      *
      * $top indicates the total number of records the user wants to be returned across all pages.
      * $skip indicates the number of records to skip from the list of batches based on the sorting method specified.  By default, we sort by descending start time.
-     * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), @nextLink will contain the link to the next page.
+     * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
      *
      * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
      * The default sorting is descending by createdDateTimeUtc.
@@ -549,66 +705,204 @@ export declare interface GetOperations {
      * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
      * This reduces the risk of the client making assumptions about the data returned.
      */
-    get(options?: GetOperationsParameters): Promise<GetOperations200Response | GetOperations400Response | GetOperations401Response | GetOperations429Response | GetOperations500Response | GetOperations503Response>;
+    get(options?: GetTranslationsParameters): Promise<GetTranslations200Response | GetTranslations400Response | GetTranslations401Response | GetTranslations429Response | GetTranslations500Response | GetTranslations503Response>;
 }
 
-export declare interface GetOperations200Headers {
+export declare interface GetTranslations200Headers {
     /** Indicates how long to wait before making a new request. */
     "retry-after"?: string;
     /** The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control. */
     etag?: string;
 }
 
-export declare interface GetOperations200Properties {
-    status: 200;
-    parsedBody: BatchStatusResponse;
-    headers: GetOperations200Headers & RawHttpHeaders;
+/**
+ * Returns a list of batch requests submitted and the status for each request.
+ * This list only contains batch requests submitted by the user (based on the resource).
+ *
+ * If the number of requests exceeds our paging limit, server-side paging is used. Paginated responses indicate a partial result and include a continuation token in the response.
+ * The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of batches based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled operations.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetTranslations200Response extends HttpResponse {
+    status: "200";
+    body: BatchStatusResponse;
+    headers: RawHttpHeaders & GetTranslations200Headers;
 }
 
-export declare type GetOperations200Response = GetOperations200Properties & HttpResponse;
-
-export declare interface GetOperations400Properties {
-    status: 400;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns a list of batch requests submitted and the status for each request.
+ * This list only contains batch requests submitted by the user (based on the resource).
+ *
+ * If the number of requests exceeds our paging limit, server-side paging is used. Paginated responses indicate a partial result and include a continuation token in the response.
+ * The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of batches based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled operations.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetTranslations400Response extends HttpResponse {
+    status: "400";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperations400Response = GetOperations400Properties & HttpResponse;
-
-export declare interface GetOperations401Properties {
-    status: 401;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns a list of batch requests submitted and the status for each request.
+ * This list only contains batch requests submitted by the user (based on the resource).
+ *
+ * If the number of requests exceeds our paging limit, server-side paging is used. Paginated responses indicate a partial result and include a continuation token in the response.
+ * The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of batches based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled operations.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetTranslations401Response extends HttpResponse {
+    status: "401";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperations401Response = GetOperations401Properties & HttpResponse;
-
-export declare interface GetOperations429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns a list of batch requests submitted and the status for each request.
+ * This list only contains batch requests submitted by the user (based on the resource).
+ *
+ * If the number of requests exceeds our paging limit, server-side paging is used. Paginated responses indicate a partial result and include a continuation token in the response.
+ * The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of batches based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled operations.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetTranslations429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperations429Response = GetOperations429Properties & HttpResponse;
-
-export declare interface GetOperations500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns a list of batch requests submitted and the status for each request.
+ * This list only contains batch requests submitted by the user (based on the resource).
+ *
+ * If the number of requests exceeds our paging limit, server-side paging is used. Paginated responses indicate a partial result and include a continuation token in the response.
+ * The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of batches based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled operations.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetTranslations500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperations500Response = GetOperations500Properties & HttpResponse;
-
-export declare interface GetOperations503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns a list of batch requests submitted and the status for each request.
+ * This list only contains batch requests submitted by the user (based on the resource).
+ *
+ * If the number of requests exceeds our paging limit, server-side paging is used. Paginated responses indicate a partial result and include a continuation token in the response.
+ * The absence of a continuation token means that no additional pages are available.
+ *
+ * $top, $skip and $maxpagesize query parameters can be used to specify a number of results to return and an offset for the collection.
+ *
+ * $top indicates the total number of records the user wants to be returned across all pages.
+ * $skip indicates the number of records to skip from the list of batches based on the sorting method specified.  By default, we sort by descending start time.
+ * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
+ *
+ * $orderBy query parameter can be used to sort the returned list (ex "$orderBy=createdDateTimeUtc asc" or "$orderBy=createdDateTimeUtc desc").
+ * The default sorting is descending by createdDateTimeUtc.
+ * Some query parameters can be used to filter the returned list (ex: "status=Succeeded,Cancelled") will only return succeeded and cancelled operations.
+ * createdDateTimeUtcStart and createdDateTimeUtcEnd can be used combined or separately to specify a range of datetime to filter the returned list by.
+ * The supported filtering query parameters are (status, ids, createdDateTimeUtcStart, createdDateTimeUtcEnd).
+ *
+ * The server honors the values specified by the client. However, clients must be prepared to handle responses that contain a different page size or contain a continuation token.
+ *
+ * When both $top and $skip are included, the server should first apply $skip and then $top on the collection.
+ * Note: If the server can't honor $top and/or $skip, the server must return an error to the client informing about it instead of just ignoring the query options.
+ * This reduces the risk of the client making assumptions about the data returned.
+ */
+export declare interface GetTranslations503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperations503Response = GetOperations503Properties & HttpResponse;
+export declare type GetTranslationsParameters = RequestParameters & GetTranslationsQueryParam;
 
-export declare type GetOperationsParameters = RequestParameters & GetOperationsQueryParam;
-
-export declare interface GetOperationsQueryParam {
-    queryParameters?: GetOperationsQueryParamProperties;
+export declare interface GetTranslationsQueryParam {
+    queryParameters?: GetTranslationsQueryParamProperties;
 }
 
-export declare interface GetOperationsQueryParamProperties {
+export declare interface GetTranslationsQueryParamProperties {
     /**
      * $top indicates the total number of records the user wants to be returned across all pages.
      *
@@ -628,7 +922,7 @@ export declare interface GetOperationsQueryParamProperties {
      */
     $skip?: number;
     /**
-     * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), @nextLink will contain the link to the next page.
+     * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
      *
      * Clients MAY request server-driven paging with a specific page size by specifying a $maxpagesize preference. The server SHOULD honor this preference if the specified page size is smaller than the server's default page size.
      */
@@ -645,57 +939,69 @@ export declare interface GetOperationsQueryParamProperties {
     $orderBy?: string[];
 }
 
-export declare interface GetOperationStatus200Headers {
+export declare interface GetTranslationStatus200Headers {
     /** Indicates how long to wait before making a new request. */
     "retry-after"?: string;
     /** The ETag response-header field provides the current value of the entity tag for the requested variant. Used with If-Match, If-None-Match and If-Range to implement optimistic concurrency control. */
     etag?: string;
 }
 
-export declare interface GetOperationStatus200Properties {
-    status: 200;
-    parsedBody: BatchStatusDetail;
-    headers: GetOperationStatus200Headers & RawHttpHeaders;
+/**
+ * Returns the status for a document translation request.
+ * The status includes the overall request status, as well as the status for documents that are being translated as part of that request.
+ */
+export declare interface GetTranslationStatus200Response extends HttpResponse {
+    status: "200";
+    body: BatchStatusDetail;
+    headers: RawHttpHeaders & GetTranslationStatus200Headers;
 }
 
-export declare type GetOperationStatus200Response = GetOperationStatus200Properties & HttpResponse;
-
-export declare interface GetOperationStatus401Properties {
-    status: 401;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for a document translation request.
+ * The status includes the overall request status, as well as the status for documents that are being translated as part of that request.
+ */
+export declare interface GetTranslationStatus401Response extends HttpResponse {
+    status: "401";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationStatus401Response = GetOperationStatus401Properties & HttpResponse;
-
-export declare interface GetOperationStatus404Properties {
-    status: 404;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for a document translation request.
+ * The status includes the overall request status, as well as the status for documents that are being translated as part of that request.
+ */
+export declare interface GetTranslationStatus404Response extends HttpResponse {
+    status: "404";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationStatus404Response = GetOperationStatus404Properties & HttpResponse;
-
-export declare interface GetOperationStatus429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for a document translation request.
+ * The status includes the overall request status, as well as the status for documents that are being translated as part of that request.
+ */
+export declare interface GetTranslationStatus429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationStatus429Response = GetOperationStatus429Properties & HttpResponse;
-
-export declare interface GetOperationStatus500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for a document translation request.
+ * The status includes the overall request status, as well as the status for documents that are being translated as part of that request.
+ */
+export declare interface GetTranslationStatus500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationStatus500Response = GetOperationStatus500Properties & HttpResponse;
-
-export declare interface GetOperationStatus503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
+/**
+ * Returns the status for a document translation request.
+ * The status includes the overall request status, as well as the status for documents that are being translated as part of that request.
+ */
+export declare interface GetTranslationStatus503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
 }
 
-export declare type GetOperationStatus503Response = GetOperationStatus503Properties & HttpResponse;
-
-export declare type GetOperationStatusParameters = RequestParameters;
+export declare type GetTranslationStatusParameters = RequestParameters;
 
 export declare interface Glossary {
     /**
@@ -713,7 +1019,7 @@ export declare interface Glossary {
     storageSource?: StorageSource;
 }
 
-export declare interface InnerErrorV2 {
+export declare interface InnerTranslationError {
     /** Gets code error string. */
     code: string;
     /** Gets high level error message. */
@@ -727,17 +1033,24 @@ export declare interface InnerErrorV2 {
      * New Inner Error format which conforms to Cognitive Services API Guidelines which is available at https://microsoft.sharepoint.com/%3Aw%3A/t/CognitiveServicesPMO/EUoytcrjuJdKpeOKIK_QRC8BPtUYQpKBi8JsWyeDMRsWlQ?e=CPq8ow.
      * This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
      */
-    innerError?: InnerErrorV2;
+    innerError?: InnerTranslationError;
 }
 
 export declare interface Routes {
-    (path: "/batches"): GetOperations;
-    (path: "/batches/{id}/documents/{documentId}", id: string, documentId: string): GetDocumentStatus;
-    (path: "/batches/{id}", id: string): CancelOperation;
-    (path: "/batches/{id}/documents", id: string): GetOperationDocumentsStatus;
-    (path: "/documents/formats"): GetDocumentFormats;
-    (path: "/glossaries/formats"): GetGlossaryFormats;
-    (path: "/storagesources"): GetDocumentStorageSource;
+    /** Resource for '/batches' has methods for the following verbs: post, get */
+    (path: "/batches"): GetTranslations;
+    /** Resource for '/batches/\{id\}/documents/\{documentId\}' has methods for the following verbs: get */
+    (path: "/batches/{id}/documents/{documentId}", id: string, documentId: string): GetDocument;
+    /** Resource for '/batches/\{id\}' has methods for the following verbs: get, delete */
+    (path: "/batches/{id}", id: string): CancelTranslation;
+    /** Resource for '/batches/\{id\}/documents' has methods for the following verbs: get */
+    (path: "/batches/{id}/documents", id: string): GetDocuments;
+    /** Resource for '/documents/formats' has methods for the following verbs: get */
+    (path: "/documents/formats"): GetSupportedDocumentFormats;
+    /** Resource for '/glossaries/formats' has methods for the following verbs: get */
+    (path: "/glossaries/formats"): GetSupportedGlossaryFormats;
+    /** Resource for '/storagesources' has methods for the following verbs: get */
+    (path: "/storagesources"): GetSupportedStorageSources;
 }
 
 export declare interface SourceInput {
@@ -753,6 +1066,113 @@ export declare interface SourceInput {
     /** Storage Source */
     storageSource?: StorageSource;
 }
+
+export declare interface StartTranslation202Headers {
+    /** Location of batch the operation */
+    "operation-location"?: string;
+}
+
+/**
+ * Use this API to submit a bulk (batch) translation request to the Document Translation service.
+ * Each request can contain multiple documents and must contain a source and destination container for each document.
+ *
+ * The prefix and suffix filter (if supplied) are used to filter folders. The prefix is applied to the subpath after the container name.
+ *
+ * Glossaries / Translation memory can be included in the request and are applied by the service when the document is translated.
+ *
+ * If the glossary is invalid or unreachable during translation, an error is indicated in the document status.
+ * If a file with the same name already exists at the destination, it will be overwritten. The targetUrl for each target language must be unique.
+ */
+export declare interface StartTranslation202Response extends HttpResponse {
+    status: "202";
+    headers: RawHttpHeaders & StartTranslation202Headers;
+}
+
+/**
+ * Use this API to submit a bulk (batch) translation request to the Document Translation service.
+ * Each request can contain multiple documents and must contain a source and destination container for each document.
+ *
+ * The prefix and suffix filter (if supplied) are used to filter folders. The prefix is applied to the subpath after the container name.
+ *
+ * Glossaries / Translation memory can be included in the request and are applied by the service when the document is translated.
+ *
+ * If the glossary is invalid or unreachable during translation, an error is indicated in the document status.
+ * If a file with the same name already exists at the destination, it will be overwritten. The targetUrl for each target language must be unique.
+ */
+export declare interface StartTranslation400Response extends HttpResponse {
+    status: "400";
+    body: TranslationErrorResponse;
+}
+
+/**
+ * Use this API to submit a bulk (batch) translation request to the Document Translation service.
+ * Each request can contain multiple documents and must contain a source and destination container for each document.
+ *
+ * The prefix and suffix filter (if supplied) are used to filter folders. The prefix is applied to the subpath after the container name.
+ *
+ * Glossaries / Translation memory can be included in the request and are applied by the service when the document is translated.
+ *
+ * If the glossary is invalid or unreachable during translation, an error is indicated in the document status.
+ * If a file with the same name already exists at the destination, it will be overwritten. The targetUrl for each target language must be unique.
+ */
+export declare interface StartTranslation401Response extends HttpResponse {
+    status: "401";
+    body: TranslationErrorResponse;
+}
+
+/**
+ * Use this API to submit a bulk (batch) translation request to the Document Translation service.
+ * Each request can contain multiple documents and must contain a source and destination container for each document.
+ *
+ * The prefix and suffix filter (if supplied) are used to filter folders. The prefix is applied to the subpath after the container name.
+ *
+ * Glossaries / Translation memory can be included in the request and are applied by the service when the document is translated.
+ *
+ * If the glossary is invalid or unreachable during translation, an error is indicated in the document status.
+ * If a file with the same name already exists at the destination, it will be overwritten. The targetUrl for each target language must be unique.
+ */
+export declare interface StartTranslation429Response extends HttpResponse {
+    status: "429";
+    body: TranslationErrorResponse;
+}
+
+/**
+ * Use this API to submit a bulk (batch) translation request to the Document Translation service.
+ * Each request can contain multiple documents and must contain a source and destination container for each document.
+ *
+ * The prefix and suffix filter (if supplied) are used to filter folders. The prefix is applied to the subpath after the container name.
+ *
+ * Glossaries / Translation memory can be included in the request and are applied by the service when the document is translated.
+ *
+ * If the glossary is invalid or unreachable during translation, an error is indicated in the document status.
+ * If a file with the same name already exists at the destination, it will be overwritten. The targetUrl for each target language must be unique.
+ */
+export declare interface StartTranslation500Response extends HttpResponse {
+    status: "500";
+    body: TranslationErrorResponse;
+}
+
+/**
+ * Use this API to submit a bulk (batch) translation request to the Document Translation service.
+ * Each request can contain multiple documents and must contain a source and destination container for each document.
+ *
+ * The prefix and suffix filter (if supplied) are used to filter folders. The prefix is applied to the subpath after the container name.
+ *
+ * Glossaries / Translation memory can be included in the request and are applied by the service when the document is translated.
+ *
+ * If the glossary is invalid or unreachable during translation, an error is indicated in the document status.
+ * If a file with the same name already exists at the destination, it will be overwritten. The targetUrl for each target language must be unique.
+ */
+export declare interface StartTranslation503Response extends HttpResponse {
+    status: "503";
+    body: TranslationErrorResponse;
+}
+
+export declare interface StartTranslationBodyParam {
+    body: BatchSubmissionRequest;
+}
+
+export declare type StartTranslationParameters = RequestParameters & StartTranslationBodyParam;
 
 export declare type Status = "NotStarted" | "Running" | "Succeeded" | "Failed" | "Cancelled" | "Cancelling" | "ValidationFailed";
 
@@ -782,59 +1202,6 @@ export declare interface StorageSourceListResult {
     value: "AzureBlob"[];
 }
 
-export declare interface SubmitBatchRequest202Headers {
-    /** Location of batch the operation */
-    "operation-location"?: string;
-}
-
-export declare interface SubmitBatchRequest202Properties {
-    status: 202;
-    headers: SubmitBatchRequest202Headers & RawHttpHeaders;
-}
-
-export declare type SubmitBatchRequest202Response = SubmitBatchRequest202Properties & HttpResponse;
-
-export declare interface SubmitBatchRequest400Properties {
-    status: 400;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type SubmitBatchRequest400Response = SubmitBatchRequest400Properties & HttpResponse;
-
-export declare interface SubmitBatchRequest401Properties {
-    status: 401;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type SubmitBatchRequest401Response = SubmitBatchRequest401Properties & HttpResponse;
-
-export declare interface SubmitBatchRequest429Properties {
-    status: 429;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type SubmitBatchRequest429Response = SubmitBatchRequest429Properties & HttpResponse;
-
-export declare interface SubmitBatchRequest500Properties {
-    status: 500;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type SubmitBatchRequest500Response = SubmitBatchRequest500Properties & HttpResponse;
-
-export declare interface SubmitBatchRequest503Properties {
-    status: 503;
-    parsedBody: ErrorResponseV2;
-}
-
-export declare type SubmitBatchRequest503Response = SubmitBatchRequest503Properties & HttpResponse;
-
-export declare interface SubmitBatchRequestBodyParam {
-    body?: BatchSubmissionRequest;
-}
-
-export declare type SubmitBatchRequestParameters = RequestParameters & SubmitBatchRequestBodyParam;
-
 export declare interface TargetInput {
     /** Location of the folder / container with your documents */
     targetUrl: string;
@@ -846,6 +1213,30 @@ export declare interface TargetInput {
     glossaries?: Glossary[];
     /** Storage Source */
     storageSource?: StorageSource;
+}
+
+export declare interface TranslationError {
+    /** Enums containing high level error codes. */
+    code: TranslationErrorCode;
+    /** Gets high level error message. */
+    message: string;
+    /**
+     * Gets the source of the error.
+     * For example it would be "documents" or "document id" in case of invalid document.
+     */
+    target?: string;
+    /**
+     * New Inner Error format which conforms to Cognitive Services API Guidelines which is available at https://microsoft.sharepoint.com/%3Aw%3A/t/CognitiveServicesPMO/EUoytcrjuJdKpeOKIK_QRC8BPtUYQpKBi8JsWyeDMRsWlQ?e=CPq8ow.
+     * This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
+     */
+    innerError?: InnerTranslationError;
+}
+
+export declare type TranslationErrorCode = "InvalidRequest" | "InvalidArgument" | "InternalServerError" | "ServiceUnavailable" | "ResourceNotFound" | "Unauthorized" | "RequestRateTooHigh";
+
+export declare interface TranslationErrorResponse {
+    /** This contains an outer error with error code, message, details, target and an inner error with more descriptive details. */
+    error?: TranslationError;
 }
 
 export { }

@@ -62,13 +62,13 @@ export interface Glossary {
     /** Storage Source */
     storageSource?: StorageSource;
 }
-export interface ErrorResponseV2 {
+export interface TranslationErrorResponse {
     /** This contains an outer error with error code, message, details, target and an inner error with more descriptive details. */
-    error?: ErrorV2;
+    error?: TranslationError;
 }
-export interface ErrorV2 {
+export interface TranslationError {
     /** Enums containing high level error codes. */
-    code: ErrorCodeV2;
+    code: TranslationErrorCode;
     /** Gets high level error message. */
     message: string;
     /**
@@ -80,9 +80,9 @@ export interface ErrorV2 {
      * New Inner Error format which conforms to Cognitive Services API Guidelines which is available at https://microsoft.sharepoint.com/%3Aw%3A/t/CognitiveServicesPMO/EUoytcrjuJdKpeOKIK_QRC8BPtUYQpKBi8JsWyeDMRsWlQ?e=CPq8ow.
      * This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
      */
-    innerError?: InnerErrorV2;
+    innerError?: InnerTranslationError;
 }
-export interface InnerErrorV2 {
+export interface InnerTranslationError {
     /** Gets code error string. */
     code: string;
     /** Gets high level error message. */
@@ -96,7 +96,7 @@ export interface InnerErrorV2 {
      * New Inner Error format which conforms to Cognitive Services API Guidelines which is available at https://microsoft.sharepoint.com/%3Aw%3A/t/CognitiveServicesPMO/EUoytcrjuJdKpeOKIK_QRC8BPtUYQpKBi8JsWyeDMRsWlQ?e=CPq8ow.
      * This contains required properties ErrorCode, message and optional properties target, details(key value pair), inner error(this can be nested).
      */
-    innerError?: InnerErrorV2;
+    innerError?: InnerTranslationError;
 }
 export interface BatchStatusResponse {
     /** The summary status of individual operation */
@@ -114,7 +114,7 @@ export interface BatchStatusDetail {
     /** List of possible statuses for job or document */
     status: Status;
     /** This contains an outer error with error code, message, details, target and an inner error with more descriptive details. */
-    error?: ErrorV2;
+    error?: TranslationError;
     /** */
     summary: StatusSummary;
 }
@@ -148,7 +148,7 @@ export interface DocumentStatusDetail {
     /** To language */
     to: string;
     /** This contains an outer error with error code, message, details, target and an inner error with more descriptive details. */
-    error?: ErrorV2;
+    error?: TranslationError;
     /** Progress of the translation if available */
     progress: number;
     /** Document Id */
@@ -184,6 +184,6 @@ export interface StorageSourceListResult {
 }
 export declare type StorageSource = "AzureBlob";
 export declare type StorageInputType = "Folder" | "File";
-export declare type ErrorCodeV2 = "InvalidRequest" | "InvalidArgument" | "InternalServerError" | "ServiceUnavailable" | "ResourceNotFound" | "Unauthorized" | "RequestRateTooHigh";
+export declare type TranslationErrorCode = "InvalidRequest" | "InvalidArgument" | "InternalServerError" | "ServiceUnavailable" | "ResourceNotFound" | "Unauthorized" | "RequestRateTooHigh";
 export declare type Status = "NotStarted" | "Running" | "Succeeded" | "Failed" | "Cancelled" | "Cancelling" | "ValidationFailed";
 //# sourceMappingURL=models.d.ts.map

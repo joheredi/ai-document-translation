@@ -1,14 +1,16 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import { RequestParameters } from "@azure-rest/core-client";
 import { BatchSubmissionRequest } from "./models";
 
-export interface SubmitBatchRequestBodyParam {
-  body?: BatchSubmissionRequest;
+export interface StartTranslationBodyParam {
+  body: BatchSubmissionRequest;
 }
 
-export type SubmitBatchRequestParameters = RequestParameters &
-  SubmitBatchRequestBodyParam;
+export type StartTranslationParameters = RequestParameters & StartTranslationBodyParam;
 
-export interface GetOperationsQueryParamProperties {
+export interface GetTranslationsQueryParamProperties {
   /**
    * $top indicates the total number of records the user wants to be returned across all pages.
    *
@@ -28,7 +30,7 @@ export interface GetOperationsQueryParamProperties {
    */
   $skip?: number;
   /**
-   * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), @nextLink will contain the link to the next page.
+   * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
    *
    * Clients MAY request server-driven paging with a specific page size by specifying a $maxpagesize preference. The server SHOULD honor this preference if the specified page size is smaller than the server's default page size.
    */
@@ -45,17 +47,16 @@ export interface GetOperationsQueryParamProperties {
   $orderBy?: string[];
 }
 
-export interface GetOperationsQueryParam {
-  queryParameters?: GetOperationsQueryParamProperties;
+export interface GetTranslationsQueryParam {
+  queryParameters?: GetTranslationsQueryParamProperties;
 }
 
-export type GetOperationsParameters = RequestParameters &
-  GetOperationsQueryParam;
-export type GetDocumentStatusParameters = RequestParameters;
-export type GetOperationStatusParameters = RequestParameters;
-export type CancelOperationParameters = RequestParameters;
+export type GetTranslationsParameters = RequestParameters & GetTranslationsQueryParam;
+export type GetDocumentParameters = RequestParameters;
+export type GetTranslationStatusParameters = RequestParameters;
+export type CancelTranslationParameters = RequestParameters;
 
-export interface GetOperationDocumentsStatusQueryParamProperties {
+export interface GetDocumentsQueryParamProperties {
   /**
    * $top indicates the total number of records the user wants to be returned across all pages.
    *
@@ -75,7 +76,7 @@ export interface GetOperationDocumentsStatusQueryParamProperties {
    */
   $skip?: number;
   /**
-   * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), @nextLink will contain the link to the next page.
+   * $maxpagesize is the maximum items returned in a page.  If more items are requested via $top (or $top is not specified and there are more items to be returned), \@nextLink will contain the link to the next page.
    *
    * Clients MAY request server-driven paging with a specific page size by specifying a $maxpagesize preference. The server SHOULD honor this preference if the specified page size is smaller than the server's default page size.
    */
@@ -92,12 +93,11 @@ export interface GetOperationDocumentsStatusQueryParamProperties {
   $orderBy?: string[];
 }
 
-export interface GetOperationDocumentsStatusQueryParam {
-  queryParameters?: GetOperationDocumentsStatusQueryParamProperties;
+export interface GetDocumentsQueryParam {
+  queryParameters?: GetDocumentsQueryParamProperties;
 }
 
-export type GetOperationDocumentsStatusParameters = RequestParameters &
-  GetOperationDocumentsStatusQueryParam;
-export type GetDocumentFormatsParameters = RequestParameters;
-export type GetGlossaryFormatsParameters = RequestParameters;
-export type GetDocumentStorageSourceParameters = RequestParameters;
+export type GetDocumentsParameters = RequestParameters & GetDocumentsQueryParam;
+export type GetSupportedDocumentFormatsParameters = RequestParameters;
+export type GetSupportedGlossaryFormatsParameters = RequestParameters;
+export type GetSupportedStorageSourcesParameters = RequestParameters;

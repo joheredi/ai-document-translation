@@ -11,7 +11,7 @@ async function main() {
   const client = BatchDocumentTranslation(endpoint, { key });
   const formatsResult = await client.path("/documents/formats").get();
 
-  if (formatsResult.status === 200) {
+  if (formatsResult.status === "200") {
     for (const item of formatsResult.body.value) {
       console.log(item.format);
     }
